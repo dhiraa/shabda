@@ -1,3 +1,7 @@
+data/freesound-audio-tagging/input/audio_test/*
+data/freesound-audio-tagging/input/audio_train/*
+data/freesound-audio-tagging/input/*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
