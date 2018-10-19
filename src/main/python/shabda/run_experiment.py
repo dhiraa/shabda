@@ -7,7 +7,8 @@ sys.path.append("src/main/python/")
 from shabda.hparams import HyperParams
 from shabda.dataset import FreeSoundDataset
 from shabda.iterator import DataIterator
-from shabda.cnn_naive_model import CustomDNN
+#TODO Changed here from cnn_naive_model
+from shabda.cnn_beginners_model import CustomDNN
 import logging
 from shabda.helpers.print_helper import *
 

@@ -2,7 +2,6 @@ import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.learn_io.generator_io import generator_input_fn
 from tqdm import tqdm
 import numpy as np
-
 from src.main.python.shabda.dataset import FreeSoundDataset
 
 
@@ -41,9 +40,13 @@ class DataIterator():
 
                 data = FreeSoundDataset.pad_data_array(data=data, max_audio_length=self._max_audio_length)
 
-                data = FreeSoundDataset.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc, sampling_rate=self._sampling_rate)
+                #TODO Commented this code
+                # data = FreeSoundDataset.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc, sampling_rate=self._sampling_rate)
+                #
+                # data = np.expand_dims(data, axis=-1) #to make it compatible with CNN network
 
-                data = np.expand_dims(data, axis=-1) #to make it compatible with CNN network
+                #TODO added this line
+                data = FreeSoundDataset.audio_norm(data)[:, np.newaxis]
 
                 data = data.flatten(order="C") #row major
 

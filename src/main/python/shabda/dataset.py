@@ -103,3 +103,9 @@ class FreeSoundDataset():
         return data, sample_rate
 
         
+    @staticmethod
+    def audio_norm(data):
+        max_data = np.max(data)
+        min_data = np.min(data)
+        data = (data-min_data)/(max_data-min_data+1e-6)
+        return data-0.5
