@@ -6,9 +6,9 @@ import tensorflow as tf
 import logging
 
 
-from shabda.dataset.internal.dataset_factory import DatasetFactory
-from shabda.iterators.internal.data_iterator_factory import DataIteratorFactory
-from shabda.iterators.internal.data_iterator_base import DataIteratorBase
+from shabda.data.dataset.internal.dataset_factory import DatasetFactory
+from shabda.data.iterators.internal.data_iterator_factory import DataIteratorFactory
+from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
 from shabda.models.internal.model_factory import ModelsFactory
 from shabda.helpers.print_helper import *
 from shabda.hyperparams.hyperparams import HParams

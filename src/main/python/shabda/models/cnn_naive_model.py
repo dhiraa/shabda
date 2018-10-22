@@ -1,11 +1,4 @@
 import tensorflow as tf
-from tensorflow.keras.layers import (Convolution1D, Dense,
-                                     Dropout, GlobalAveragePooling1D,
-                                     GlobalMaxPool1D, Input, MaxPool1D,
-                                     concatenate)
-from tensorflow.keras.layers import (Convolution2D, GlobalAveragePooling2D, BatchNormalization, Flatten,
-                                     GlobalMaxPool2D, MaxPool2D, concatenate, Activation)
-
 from tensorflow.contrib.learn import ModeKeys
 
 from shabda.helpers.print_helper import *
@@ -18,6 +11,13 @@ class CustomDNN(tf.estimator.Estimator):
             config=run_config)
 
 
+    def defaul_params(self):
+        config = {
+
+        }
+
+        return config
+    
     def _model_fn(self, features, labels, mode):
         """Model function used in the estimator.
 

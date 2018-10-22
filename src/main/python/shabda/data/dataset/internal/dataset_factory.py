@@ -2,11 +2,11 @@ import sys
 sys.path.append("../")
 
 from importlib import import_module
-import shabda.dataset
+
 class DatasetFactory():
 
     dataset_path = {
-        "freesound_dataset": "shabda.dataset.freesound_dataset",
+        "freesound_dataset": "shabda.data.dataset.freesound_dataset",
     }
 
     datasets = {

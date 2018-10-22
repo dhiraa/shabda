@@ -1,4 +1,4 @@
-from shabda.iterators.internal.data_iterator_base import DataIteratorBase
+from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
 
 
 class FreeSoundDataIteratorBase(DataIteratorBase):

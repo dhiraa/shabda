@@ -1,5 +1,5 @@
 import tensorflow as tf
-from shabda.dataset import FreeSoundDataset
+from shabda.data.dataset.freesound_dataset import FreeSoundDataset
 
 
 class FreeSoundDatasetTest(tf.test.TestCase):

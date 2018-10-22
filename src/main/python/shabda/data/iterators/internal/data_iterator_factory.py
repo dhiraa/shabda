@@ -8,7 +8,7 @@ from importlib import import_module
 class DataIteratorFactory():
 
     iterator_path = {
-        "mfcc_iterator": "shabda.iterators.mfcc_iterator"
+        "mfcc_iterator": "shabda.data.iterators.mfcc_iterator"
     }
 
     iterators = {

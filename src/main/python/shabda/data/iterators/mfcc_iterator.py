@@ -2,9 +2,10 @@ import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.learn_io.generator_io import generator_input_fn
 from tqdm import tqdm
 import numpy as np
-from shabda.dataset.freesound_dataset import FreeSoundDataset
+from shabda.data.dataset.freesound_dataset import FreeSoundDataset
 from overrides import overrides
-from shabda.iterators.internal.free_sound_data_iterator_base import FreeSoundDataIteratorBase
+from shabda.data.iterators.internal.free_sound_data_iterator_base import FreeSoundDataIteratorBase
+from shabda.helpers import audio
 
 
 class IteratorInitializerHook(tf.train.SessionRunHook):
@@ -31,12 +32,12 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
 
         def generator():
             for i in tqdm(range(number_of_examples), desc=mode):
-                data, sample_rate = FreeSoundDataset.load_wav_audio_file(file_path=wav_files_path[i])
+                data, sample_rate = audio.load_wav_audio_file(file_path=wav_files_path[i])
 
-                data = FreeSoundDataset.pad_data_array(data=data, max_audio_length=self._max_audio_length)
+                data = audio.pad_data_array(data=data, max_audio_length=self._max_audio_length)
 
                 #TODO Commented this code
-                data = FreeSoundDataset.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc, sampling_rate=self._sampling_rate)
+                data = audio.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc, sampling_rate=self._sampling_rate)
                 #
                 data = np.expand_dims(data, axis=-1) #to make it compatible with CNN network
 
