@@ -1,3 +1,20 @@
+
+
+# Python Environment
+```
+conda create -n shabda python=3.6 
+source activate shabda
+pip install tqdm
+pip3 install tensorflow-gpu #system level installation
+python3 -c "import tensorflow as tf; print(tf.__version__)"
+pip install pandas
+pip install numpy
+pip install sklearn
+pip install override
+
+
+```
+
 # Dataset
 - https://www.kaggle.com/c/freesound-audio-tagging
 
@@ -12,7 +29,7 @@ Commands:
 **Train:**
 
 ```
-python src/main/python/sabdha/run_experiment.py --mode=train --model-dir=models/naive_conv_with_reshape/ --num-epochs=1 --batch-size=64
+python src/main/python/shabda/examples/cnn_naive_classifier/run.py --mode=train
 ```
 
 
@@ -52,6 +69,9 @@ toco \
 
 ```
 
+## Android
+- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/android
+- https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/android
 
 ### References:
 - https://heartbeat.fritz.ai/intro-to-machine-learning-on-android-how-to-convert-a-custom-model-to-tensorflow-lite-e07d2d9d50e3
