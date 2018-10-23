@@ -34,10 +34,12 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
             for i in tqdm(range(number_of_examples), desc=mode):
                 data, sample_rate = audio.load_wav_audio_file(file_path=wav_files_path[i])
 
-                data = audio.pad_data_array(data=data, max_audio_length=self._max_audio_length)
+                data = audio.pad_data_array(data=data,
+                                            max_audio_length=self._max_audio_length)
 
                 #TODO Commented this code
-                data = audio.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc, sampling_rate=self._sampling_rate)
+                data = audio.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc,
+                                                    sampling_rate=self._sampling_rate)
                 #
                 data = np.expand_dims(data, axis=-1) #to make it compatible with CNN network
 
@@ -67,7 +69,7 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
             shuffle=True,
             num_epochs=1,
             queue_capacity=2000,
-            num_threads=1,
+            num_threads=3,
         )
 
         return train_input_fn
@@ -85,7 +87,7 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
             shuffle=True,
             num_epochs=1,
             queue_capacity=2000,
-            num_threads=1,
+            num_threads=3,
         )
 
         return val_input_fn

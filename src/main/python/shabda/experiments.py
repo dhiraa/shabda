@@ -98,11 +98,11 @@ class Experiments():
         mode = self.mode
 
         if (mode == "train" or mode == "retrain"):
-            for current_epoch in tqdm(range(num_epochs)):
+            for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
                 current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
 
                 self.model.train(input_fn=self.data_iterator.get_train_input_fn(),
-                            max_steps=current_max_steps)
+                                 max_steps=current_max_steps)
 
                 tf.logging.info(CGREEN2 + str("Evaluation on epoch: " + str(current_epoch + 1)) + CEND)
 

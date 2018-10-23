@@ -129,13 +129,17 @@ public class RecognizeCommands {
     // Prune any earlier results that are too old for the averaging window.
     final long timeLimit = currentTimeMS - averageWindowDurationMs;
     while (previousResults.getFirst().first < timeLimit) {
-      previousResults.removeFirst();
+        Pair<Long, float[]> tmp = previousResults.removeFirst();
+        Log.v("previousResults",  tmp.first.toString());
+        Log.v("previousResults",tmp.first + " " +  currentTimeMS + " " + timeLimit);
+
     }
 
     // If there are too few results, assume the result will be unreliable and
     // bail.
     final long earliestTime = previousResults.getFirst().first;
     final long samplesDuration = currentTimeMS - earliestTime;
+
     if ((howManyResults < minimumCount)
         || (samplesDuration < (averageWindowDurationMs / MINIMUM_TIME_FRACTION))) {
       Log.v("RecognizeResult", "Too few results : " + howManyResults + " " +  minimumCount);

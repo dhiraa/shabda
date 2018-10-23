@@ -41,6 +41,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -73,10 +74,10 @@ public class SpeechActivity extends  SwipeActivityClass {
     private static final int SAMPLE_RATE = 44100;//16000;
     private static final int SAMPLE_DURATION_MS = 2000;
     private static final int RECORDING_LENGTH = (int) (SAMPLE_RATE * SAMPLE_DURATION_MS / 1000);
-    private static final long AVERAGE_WINDOW_DURATION_MS = 500;
+    private static final long AVERAGE_WINDOW_DURATION_MS = 4000;
     private static final float DETECTION_THRESHOLD = 0.70f;
-    private static final int SUPPRESSION_MS = 1500;
-    private static final int MINIMUM_COUNT = 0;//3;
+    private static final int SUPPRESSION_MS = 2500;
+    private static final int MINIMUM_COUNT = 3;//3;
     private static final long MINIMUM_TIME_BETWEEN_SAMPLES_MS = 30;
     private static final String LABEL_FILENAME = "file:///android_asset/labels.txt";
     private static final String MODEL_FILENAME = "file:///android_asset/opt_naive_conv_graph.pb";
@@ -105,6 +106,28 @@ public class SpeechActivity extends  SwipeActivityClass {
     private List<String> labels = new ArrayList<String>();
     private List<String> displayedLabels = new ArrayList<>();
     private RecognizeCommands recognizeCommands = null;
+
+    private static class ScoreForSorting implements Comparable<ScoreForSorting> {
+        public final float score;
+        public final int index;
+
+        public ScoreForSorting(float inScore, int inIndex) {
+            score = inScore;
+            index = inIndex;
+        }
+
+        @Override
+        public int compareTo(ScoreForSorting other) {
+            if (this.score > other.score) {
+                return -1;
+            } else if (this.score < other.score) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +191,14 @@ public class SpeechActivity extends  SwipeActivityClass {
         startRecognition();
     }
 
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+
+        stopRecognition();
+        stopRecording();
+    }
 
     @Override
     protected void onSwipeRight() {
@@ -301,12 +332,13 @@ public class SpeechActivity extends  SwipeActivityClass {
         recognitionThread = null;
     }
 
+
     private void recognize() {
         Log.v(LOG_TAG, "Start recognition");
 
         short[] inputBuffer = new short[RECORDING_LENGTH];
         double[] floatInputBuffer = new double[RECORDING_LENGTH];
-        float[] outputScores = new float[labels.size()];
+        final float[] outputScores = new float[labels.size()];
         String[] outputScoresNames = new String[] {OUTPUT_SCORES_NAME};
         int[] sampleRateList = new int[] {SAMPLE_RATE};
 
@@ -335,31 +367,775 @@ public class SpeechActivity extends  SwipeActivityClass {
             //MFCC java library.
             MFCC mfccConvert = new MFCC();
             float[] mfccInput = mfccConvert.process(floatInputBuffer);
-//        Log.v(LOG_TAG, "MFCC Input======> " + Arrays.toString(mfccInput));
 
 
             // Run the model.
-//      inferenceInterface.feed(SAMPLE_RATE_NAME, sampleRateList);
             inferenceInterface.feed(INPUT_DATA_NAME, mfccInput,16384);
             inferenceInterface.run(outputScoresNames);
             inferenceInterface.fetch(OUTPUT_SCORES_NAME, outputScores);
 
-            //Output the result.
-            String resultTemp = "";
+            final int labelsCount =  labels.size();
+            // Sort the averaged results in descending score order.
+            final ScoreForSorting[] sortedAverageScores = new ScoreForSorting[labelsCount];
+            for (int i = 0; i < labelsCount; ++i) {
+                sortedAverageScores[i] = new ScoreForSorting(outputScores[i], i);
+            }
+            Arrays.sort(sortedAverageScores);
+
             for (int i = 0;i<outputScores.length;i++) {
                 if (outputScores[i] == 0)
                     break;
-                resultTemp += (float) outputScores[i];
+                Log.v(LOG_TAG, "(float) sortedAverageScores[i]: " + (float) sortedAverageScores[i].score);
             }
-            final String r = resultTemp;
+
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    outputText.setText("nah nah ...");
+                    String label = labels.get(sortedAverageScores[0].index);
+                    String label1 = labels.get(sortedAverageScores[1].index);
+                    String label2 = labels.get(sortedAverageScores[2].index);
+                    String res = label + " - " + sortedAverageScores[0].score + "\n" +
+                            label1 + " - " + sortedAverageScores[1].score + "\n" +
+                            label2 + " - " + sortedAverageScores[2].score
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            ;
+                    outputText.setText( res );
                 }
             });
 
-            Log.v(LOG_TAG, "End recognition: " + resultTemp);
 
 
 
@@ -388,6 +1164,9 @@ public class SpeechActivity extends  SwipeActivityClass {
                                                         SpeechActivity.this, R.animator.color_animation);
                                 colorAnimation.setTarget(labelView);
                                 colorAnimation.start();
+                            }
+                            else {
+                                Log.v(LOG_TAG, "No highlighting...");
                             }
                         }
                     });

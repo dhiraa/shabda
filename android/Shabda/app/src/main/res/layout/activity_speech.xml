@@ -23,19 +23,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Say one of the words below!"
-            android:id="@+id/textView"
-            android:textAlignment="center"
             android:layout_gravity="top"
-            android:textSize="24dp"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            />
+            android:layout_marginTop="10dp"
+            android:text="Shabda - Audio Classifier"
+            android:textAlignment="center"
+            android:textSize="24dp" />
 
         <TextView
             android:id="@+id/output_text"
@@ -50,7 +50,7 @@
         <ListView
             android:id="@+id/list_view"
             android:layout_width="240dp"
-            android:layout_height="wrap_content"
+            android:layout_height="290dp"
             android:layout_gravity="top|center_horizontal"
             android:layout_marginTop="100dp"
             android:background="@drawable/border"

@@ -17,7 +17,7 @@ class CustomDNN(tf.estimator.Estimator):
         }
 
         return config
-    
+
     def _model_fn(self, features, labels, mode):
         """Model function used in the estimator.
 
@@ -175,31 +175,6 @@ class CustomDNN(tf.estimator.Estimator):
             train_op=train_op,
             eval_metric_ops=eval_metric_ops
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
