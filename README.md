@@ -46,7 +46,7 @@ python3 -c "import tensorflow as tf; print(tf.__version__)"
 pip install pandas
 pip install numpy
 pip install sklearn
-pip install override
+pip install overrides
 
 
 ```
