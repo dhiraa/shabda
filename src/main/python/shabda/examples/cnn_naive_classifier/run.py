@@ -10,7 +10,7 @@ import os
 import tensorflow as tf
 sys.path.append("src/main/python/")
 
-from shabda.experiments import Experiments
+from shabda.run.experiments import Experiments
 
 flags = tf.flags
 flags.DEFINE_string("config", "config", "The config to use.")

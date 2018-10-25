@@ -8,11 +8,13 @@ from importlib import import_module
 class DataIteratorFactory():
 
     iterator_path = {
-        "mfcc_iterator": "shabda.data.iterators.mfcc_iterator"
+        "mfcc_iterator": "shabda.data.iterators.mfcc_iterator",
+        "audio_mfcc_librosa" : "shabda.data.iterators.audio_mfcc_librosa"
     }
 
     iterators = {
-        "mfcc_iterator": "MFCCDataIterator"
+        "mfcc_iterator": "MFCCDataIterator",
+        "audio_mfcc_librosa" : "AudioMFCC"
     }
 
 

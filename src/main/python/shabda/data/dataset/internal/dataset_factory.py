@@ -7,10 +7,12 @@ class DatasetFactory():
 
     dataset_path = {
         "freesound_dataset": "shabda.data.dataset.freesound_dataset",
+        "speech_commands_v0_02" : "shabda.data.dataset.speech_commands_v0_02"
     }
 
     datasets = {
         "freesound_dataset": "FreeSoundDataset",
+        "speech_commands_v0_02" : "SpeechCommandsV002"
     }
 
     def __init__(self):
