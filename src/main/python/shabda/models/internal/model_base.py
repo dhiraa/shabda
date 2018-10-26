@@ -1,0 +1,3 @@
+
+class ModelBase(object):
+    pass

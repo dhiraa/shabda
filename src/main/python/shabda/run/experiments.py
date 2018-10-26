@@ -73,6 +73,7 @@ class Experiments():
         self.model = self.get_model_reference(self._hparams.model_name)
 
         self.dataset = self.dataset()
+        self.dataset.init()
         self.data_iterator: DataIteratorBase  = self.data_iterator(hparams=self._hparams.data_iterator, dataset = self.dataset)
 
         run_config = tf.ConfigProto()
@@ -86,13 +87,14 @@ class Experiments():
                                                 save_summary_steps=25,
                                                 model_dir=self._hparams["model_directory"])
 
+        model_params = {"labels_dim" : self.dataset.get_labels_dim()}
         self.model = self.model(model_dir=self._hparams.model_directory,
                                 run_config=run_config,
-                                hparams=None)
+                                hparams=model_params)
 
     def run(self):
         self.setup()
-        num_samples = self.dataset.get_num_samples()
+        num_samples = self.dataset.get_num_train_samples()
         batch_size = self._hparams.data_iterator.batch_size
         num_epochs = self._hparams.num_epochs
         mode = self.mode

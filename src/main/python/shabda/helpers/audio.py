@@ -29,11 +29,15 @@ def get_frequency_spectrum(data, sampling_rate, n_mfcc):
 
 def load_wav_audio_file(file_path):
     data, sample_rate = librosa.core.load(file_path, sr=None, res_type="kaiser_fast")
-    # data, sample_rate = librosa.core.load("data/freesound-audio-tagging/input/audio_train/00044347.wav", res_type="kaiser_fast")
     return data, sample_rate
 
 
 def audio_norm(data):
+    """
+    Normalizes the input np.array
+    :param data: np.array
+    :return: np.array
+    """
     max_data = np.max(data)
     min_data = np.min(data)
     data = (data - min_data) / (max_data - min_data + 1e-6)
@@ -186,3 +190,9 @@ def data_generator(data, params, mode='train'):
                 print(err, label_id, uid, fname)
 
     return generator
+
+def audio_norm(data):
+    max_data = np.max(data)
+    min_data = np.min(data)
+    data = (data-min_data)/(max_data-min_data+1e-6)
+    return data-0.5

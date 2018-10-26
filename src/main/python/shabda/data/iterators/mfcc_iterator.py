@@ -69,7 +69,7 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
             shuffle=True,
             num_epochs=1,
             queue_capacity=2000,
-            num_threads=3,
+            num_threads=1,
         )
 
         return train_input_fn
@@ -87,7 +87,7 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
             shuffle=True,
             num_epochs=1,
             queue_capacity=2000,
-            num_threads=3,
+            num_threads=1,
         )
 
         return val_input_fn

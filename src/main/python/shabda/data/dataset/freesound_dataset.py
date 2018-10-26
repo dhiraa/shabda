@@ -36,11 +36,15 @@ class FreeSoundDataset(DatasetBase):
         self.val_df = None
         self.test_df = None
 
-        self.load_data_info()
+    @overrides
+    def init(self):
+        self._load_data_info()
+        self._setup_labels()
 
     @staticmethod
     def default_hparams():
         freesound_dataset = {
+            "labels_index_map_store_path": "/tmp/shabda/",
             "dev_csv_path": "data/freesound-audio-tagging/input/train.csv",
             "val_csv_path": None,  # we dont have any validation csv file as such
             "test_csv_path": "./data/freesound-audio-tagging/input/sample_submission.csv",
@@ -51,7 +55,11 @@ class FreeSoundDataset(DatasetBase):
 
         return freesound_dataset
 
-    def load_data_info(self):
+    @overrides
+    def get_dataset_name(self):
+        return "free_sound_dataset"
+
+    def _load_data_info(self):
         #fname label  manually_verified
         print_info("Train data info DF : " + self.dev_csv_path)
         print_info("Test data info DF : " +  self.test_csv_path)
@@ -66,11 +74,17 @@ class FreeSoundDataset(DatasetBase):
 
         self.test_df = pd.read_csv(self.test_csv_path)
 
-        print_error(self.train_df.head(10))
+    @overrides
+    def get_num_train_samples(self):
+        return self.train_df.shape[0]
 
     @overrides
-    def get_num_samples(self):
-        return self.train_df.shape[0]
+    def get_lables(self):
+        return self.train_df["label"].unique()
+
+    @overrides
+    def get_default_labels(self):
+        return []
 
     def get_dev_wav_files(self):
         return self.train_df['fname']
@@ -79,10 +93,10 @@ class FreeSoundDataset(DatasetBase):
         return self.val_df['fname']
 
     def get_dev_labels_df(self):
-        return pd.get_dummies(self.train_df["label"])
+        return self.train_df["label"].apply(lambda label : self.get_one_hot_encoded(label))
 
     def get_val_labels_df(self):
-        return pd.get_dummies(self.val_df["label"])
+        return self.val_df["label"].apply(lambda label : self.get_one_hot_encoded(label))
 
     @property
     def dev_audio_files_dir(self):

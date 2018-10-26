@@ -2,6 +2,8 @@ import tensorflow as tf
 from tensorflow.contrib.learn import ModeKeys
 
 from shabda.helpers.print_helper import *
+from shabda.helpers import utils
+from shabda.hyperparams.hyperparams import HParams
 
 class CustomDNN(tf.estimator.Estimator):
     def __init__(self, model_dir, run_config, hparams=None):
@@ -10,12 +12,21 @@ class CustomDNN(tf.estimator.Estimator):
             model_dir=model_dir,
             config=run_config)
 
+        print_error(hparams)
+        _hparams = utils.dict_fetch(
+            hparams, self.default_hparams())
 
-    def defaul_params(self):
-        config = {
+        print_error(_hparams)
 
-        }
+        self._hparams = HParams(_hparams, self.default_hparams())
 
+        print_error(self._hparams)
+
+        self.labels_dim = self._hparams["labels_dim"]
+
+    @staticmethod
+    def default_hparams():
+        config = {"labels_dim": "-1"}
         return config
 
     def _model_fn(self, features, labels, mode):
@@ -96,7 +107,7 @@ class CustomDNN(tf.estimator.Estimator):
             # [?, self.NUM_CLASSES]
 
             logits = tf.layers.dense(inputs=dense,
-                                     units=41,
+                                     units=self.labels_dim,
                                      kernel_initializer=tf.contrib.layers.xavier_initializer(seed=42))
 
             tf.logging.info('logits: ------> {}'.format(logits))
