@@ -2,8 +2,12 @@ from shabda.hyperparams.hyperparams import HParams
 
 class DataIteratorBase():
     def __init__(self, hparams, dataset):
-        self._hparams = HParams(hparams, default_hparams=None)
+        self._hparams = HParams(hparams, default_hparams=self.get_default_params())
         self._dataset = dataset
+
+    @staticmethod
+    def get_default_params():
+        return {"key": "value"}
 
     def _get_train_input_fn(self):
         raise NotImplementedError

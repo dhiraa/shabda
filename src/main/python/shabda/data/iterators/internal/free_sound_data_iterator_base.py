@@ -1,34 +1,39 @@
 from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
-
+from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
 
 class FreeSoundDataIteratorBase(DataIteratorBase):
-    def __init__(self, hparams, dataset):
+    def __init__(self, hparams, dataset: AudioDatasetBase):
         DataIteratorBase.__init__(self, hparams, dataset)
+
+        if not isinstance(dataset,  AudioDatasetBase):
+            raise AssertionError("dataser should be an inherited class of AudioDatasetBase")
 
         self.name = "FreeSoundDataIteratorBase"
 
         self._batch_size = self._hparams.batch_size
+        self._num_epochs = self._hparams.num_epochs
         self._sampling_rate = self._hparams.sampling_rate
         self._max_audio_length = self._hparams.sampling_rate * self._hparams.audio_duration  # 32000
         self._n_mfcc = self._hparams.n_mfcc
 
-        self.train_wav_files_path = []
-        self.val_wav_files_path = []
-        self.test_wav_files_path = []
+        self._train_files_path = dataset.get_train_files()
+        self._train_labels = dataset.get_train_labels()
 
+        self._val_files_path = dataset.get_val_files()
+        self._val_labels = dataset.get_val_labels()
 
-        self.train_labels = dataset.get_dev_labels_df().values
-        self.val_labels = dataset.get_val_labels_df().values
+        self.test_files_path = []
 
-        for file_name in dataset.get_dev_wav_files():
-            self.train_wav_files_path.append(dataset.dev_audio_files_dir + "/" + file_name)
+    @staticmethod
+    def get_default_params():
+        config = {"use_mfcc": False,
+        "n_mfcc": 64,
+        "batch_size": 64,
+        "num_epochs" : 1,
+        "sampling_rate": 44100,
+        "audio_duration": 2}
 
-        for file_name in dataset.get_val_wav_files():
-            self.val_wav_files_path.append(dataset.dev_audio_files_dir + "/" + file_name)
-
-        for file_name in dataset.get_val_wav_files():
-            self.test_wav_files_path.append(dataset.dev_audio_files_dir + "/" + file_name)
-
+        return config
 
     def _get_train_input_fn(self):
         raise NotImplementedError

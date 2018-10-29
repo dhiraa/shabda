@@ -14,11 +14,12 @@ experiments = {
     "learning_rate" : 0.0001,
 
     "freesound_dataset" : {
+        "labels_index_map_store_path": "/tmp/shabda/",
         "n_classes": 41,
-        "dev_csv_path" : "data/freesound-audio-tagging/input/train.csv",
-        "val_csv_path" : "None",  # we dont have any validation csv file as such
+        "train_csv_path" : "data/freesound-audio-tagging/input/train.csv",
+        "val_csv_path" : None,  # we dont have any validation csv file as such
         "test_csv_path" : "./data/freesound-audio-tagging/input/sample_submission.csv",
-        "dev_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_train/",
+        "train_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_train/",
         "val_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_train/",
         "test_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_test/"
     },
@@ -82,6 +83,6 @@ experiments = {
     },
 
     "model" : {
-
+        "out_dim" : 41
     }
 }

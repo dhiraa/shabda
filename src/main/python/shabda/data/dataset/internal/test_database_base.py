@@ -2,12 +2,12 @@ import unittest
 import os
 import numpy as np
 from overrides import overrides
-from shabda.data.dataset.internal.dataset_base import DatasetBase
+from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
 
 
-class TestDataset(DatasetBase):
+class TestAudioDataset(AudioDatasetBase):
     def __init__(self, hparams):
-        DatasetBase.__init__(self, hparams=hparams)
+        AudioDatasetBase.__init__(self, hparams=hparams)
 
     @overrides
     def init(self):
@@ -35,7 +35,7 @@ class TestDataset(DatasetBase):
 
 class TestDatabaseBase(unittest.TestCase):
     def setUp(self):
-        self.dataset = TestDataset({"dummy_key": -1})
+        self.dataset = TestAudioDataset({"dummy_key": -1})
         self.dataset.init()
 
     def test_get_one_hot_encoded(self):

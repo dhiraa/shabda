@@ -12,6 +12,7 @@ from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
 from shabda.models.internal.model_factory import ModelsFactory
 from shabda.helpers.print_helper import *
 from shabda.hyperparams.hyperparams import HParams
+from shabda.run.executor import Executor
 
 # get TF logger
 log = logging.getLogger('tensorflow')
@@ -20,7 +21,7 @@ log.setLevel(logging.DEBUG)
 CGREEN2  = '\33[92m'
 CEND      = '\33[0m'
 
-class Experiments():
+class Experiments(object):
     def __init__(self, hparams, mode='train'):
         self._hparams = HParams(hparams, self.default_hparams())
 
@@ -68,29 +69,33 @@ class Experiments():
         return  model
 
     def setup(self):
-        self.dataset = self.get_dataset_reference(self._hparams.dataset_name)
-        self.data_iterator  = self.get_iterator_reference(self._hparams.data_iterator_name)
-        self.model = self.get_model_reference(self._hparams.model_name)
-
-        self.dataset = self.dataset()
-        self.dataset.init()
-        self.data_iterator: DataIteratorBase  = self.data_iterator(hparams=self._hparams.data_iterator, dataset = self.dataset)
 
         run_config = tf.ConfigProto()
         run_config.gpu_options.allow_growth = True
         # run_config.gpu_options.per_process_gpu_memory_fraction = 0.50
         run_config.allow_soft_placement = True
         run_config.log_device_placement = False
-        run_config = tf.contrib.learn.RunConfig(session_config=run_config,
+        self._run_config = tf.contrib.learn.RunConfig(session_config=run_config,
                                                 save_checkpoints_steps=50,
                                                 keep_checkpoint_max=5,
                                                 save_summary_steps=25,
                                                 model_dir=self._hparams["model_directory"])
 
-        model_params = {"labels_dim" : self.dataset.get_labels_dim()}
-        self.model = self.model(model_dir=self._hparams.model_directory,
-                                run_config=run_config,
-                                hparams=model_params)
+        # Using factory classes get the handle for the actual classes from string
+        self.dataset = self.get_dataset_reference(self._hparams.dataset_name)
+        self._data_iterator  = self.get_iterator_reference(self._hparams.data_iterator_name)
+        self.model = self.get_model_reference(self._hparams.model_name)
+
+        # Initialize the handles and call any user specific init() methods
+        self.dataset = self.dataset()
+        self.dataset.init()
+
+        self._data_iterator: DataIteratorBase  = self._data_iterator(hparams=self._hparams.data_iterator, dataset = self.dataset)
+
+        model_params = self._hparams.model
+        # model_params["out_dim"] = self.dataset.get_labels_dim()
+
+        self.model = self.model(hparams=model_params)
 
     def run(self):
         self.setup()
@@ -99,18 +104,25 @@ class Experiments():
         num_epochs = self._hparams.num_epochs
         mode = self.mode
 
+        # if (mode == "train" or mode == "retrain"):
+        #     for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
+        #         current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
+        #
+        #         self.model.train(input_fn=self.data_iterator.get_train_input_fn(),
+        #                          max_steps=current_max_steps)
+        #
+        #         tf.logging.info(CGREEN2 + str("Evaluation on epoch: " + str(current_epoch + 1)) + CEND)
+        #
+        #         eval_results = self.model.evaluate(input_fn=self.data_iterator.get_val_input_fn())
+        #
+        #         tf.logging.info(CGREEN2 + str(str(eval_results)) + CEND)
+        # elif mode == "predict":
+        #     self.dataset.predict_on_test_files()
+
+        exor = Executor(model=self.model, data_iterator=self._data_iterator, config=self._run_config)
+
         if (mode == "train" or mode == "retrain"):
             for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
                 current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
-
-                self.model.train(input_fn=self.data_iterator.get_train_input_fn(),
-                                 max_steps=current_max_steps)
-
-                tf.logging.info(CGREEN2 + str("Evaluation on epoch: " + str(current_epoch + 1)) + CEND)
-
-                eval_results = self.model.evaluate(input_fn=self.data_iterator.get_val_input_fn())
-
-                tf.logging.info(CGREEN2 + str(str(eval_results)) + CEND)
-        elif mode == "predict":
-            self.dataset.predict_on_test_files()
+                exor.train_and_evaluate(max_train_steps=current_max_steps, eval_steps=None)
 

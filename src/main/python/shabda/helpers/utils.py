@@ -1,5 +1,16 @@
 from shabda.hyperparams.hyperparams import HParams
 
+def maybe_hparams_to_dict(hparams):
+    """If :attr:`hparams` is an instance of :class:`~texar.HParams`,
+    converts it to a `dict` and returns. If :attr:`hparams` is a `dict`,
+    returns as is.
+    """
+    if hparams is None:
+        return None
+    if isinstance(hparams, dict):
+        return hparams
+    return hparams.todict()
+
 def dict_fetch(src_dict, tgt_dict_or_keys):
     """Fetches a sub dict of :attr:`src_dict` with the keys in
     :attr:`tgt_dict_or_keys`.

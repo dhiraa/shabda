@@ -11,7 +11,7 @@ class DatasetFactory():
     }
 
     datasets = {
-        "freesound_dataset": "FreeSoundDataset",
+        "freesound_dataset": "FreeSoundAudioDataset",
         "speech_commands_v0_02" : "SpeechCommandsV002"
     }
 
