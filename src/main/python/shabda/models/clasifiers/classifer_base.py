@@ -30,7 +30,7 @@ class ClassifierBase(ModelBase):
         loss = tf.reduce_mean(loss, name="softmax_cross_entropy_mean_loss")
         return loss
 
-    def _build_layers(self, features):
+    def _build_layers(self, features, mode):
         layer1 = tf.layers.dense(inputs=features,
                                  units=self._out_dim,
                                  kernel_initializer=tf.contrib.layers.xavier_initializer(seed=42))
@@ -88,7 +88,7 @@ class ClassifierBase(ModelBase):
         optimizer = None
         eval_metric_ops = {}
 
-        logits = self._build_layers(features=features)
+        logits = self._build_layers(features=features, mode=mode)
         predicted_class = self._get_predicted_classes(logits=logits)
         predicted_probabilities = self._get_class_probabilities(logits=logits)
         predictions = {
@@ -97,6 +97,9 @@ class ClassifierBase(ModelBase):
         }
 
         if mode != tf.estimator.ModeKeys.PREDICT:
+            # labels = tf.reshape(labels, shape=(-1, self._out_dim), name="labels")
+            tf.logging.info('labels: -----> {}'.format(labels))
+
             loss = self._get_loss(labels=labels, logits=logits)
             optimizer = self._get_optimizer(loss)
             eval_metric_ops = self._get_eval_metrics(logits=logits, labels=labels)

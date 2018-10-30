@@ -76,10 +76,11 @@ class Experiments(object):
         run_config.allow_soft_placement = True
         run_config.log_device_placement = False
         self._run_config = tf.contrib.learn.RunConfig(session_config=run_config,
-                                                save_checkpoints_steps=50,
-                                                keep_checkpoint_max=5,
-                                                save_summary_steps=25,
-                                                model_dir=self._hparams["model_directory"])
+                                                      save_checkpoints_steps=50,
+                                                      keep_checkpoint_max=5,
+                                                      save_summary_steps=25,
+                                                      model_dir=self._hparams["model_directory"],
+                                                      log_step_count_steps=10)
 
         # Using factory classes get the handle for the actual classes from string
         self.dataset = self.get_dataset_reference(self._hparams.dataset_name)
@@ -93,9 +94,22 @@ class Experiments(object):
         self._data_iterator: DataIteratorBase  = self._data_iterator(hparams=self._hparams.data_iterator, dataset = self.dataset)
 
         model_params = self._hparams.model
-        # model_params["out_dim"] = self.dataset.get_labels_dim()
 
         self.model = self.model(hparams=model_params)
+
+    def test_dataset(self):
+        iterator = self._data_iterator.get_train_input_fn().make_initializable_iterator()
+        next_element = iterator.get_next()
+        print_error(next_element)
+        init_op = iterator.initializer
+        with tf.Session() as sess:
+            # Initialize the iterator
+            sess.run(init_op)
+            print(sess.run(next_element))
+            print(sess.run(next_element))
+            # Move the iterator back to the beginning
+            sess.run(init_op)
+            print(sess.run(next_element))
 
     def run(self):
         self.setup()
@@ -104,25 +118,10 @@ class Experiments(object):
         num_epochs = self._hparams.num_epochs
         mode = self.mode
 
-        # if (mode == "train" or mode == "retrain"):
-        #     for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
-        #         current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
-        #
-        #         self.model.train(input_fn=self.data_iterator.get_train_input_fn(),
-        #                          max_steps=current_max_steps)
-        #
-        #         tf.logging.info(CGREEN2 + str("Evaluation on epoch: " + str(current_epoch + 1)) + CEND)
-        #
-        #         eval_results = self.model.evaluate(input_fn=self.data_iterator.get_val_input_fn())
-        #
-        #         tf.logging.info(CGREEN2 + str(str(eval_results)) + CEND)
-        # elif mode == "predict":
-        #     self.dataset.predict_on_test_files()
-
         exor = Executor(model=self.model, data_iterator=self._data_iterator, config=self._run_config)
 
         if (mode == "train" or mode == "retrain"):
             for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
                 current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
-                exor.train_and_evaluate(max_train_steps=current_max_steps, eval_steps=None)
+                exor.train(max_steps=current_max_steps)#, eval_steps=None)
 

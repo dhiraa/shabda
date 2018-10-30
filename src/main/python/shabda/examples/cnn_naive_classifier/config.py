@@ -77,12 +77,15 @@ experiments = {
     "data_iterator" : {
         "use_mfcc": False,
         "n_mfcc": 64,
-        "batch_size": 64,
+        "batch_size": 32,
         "sampling_rate": 44100,
         "audio_duration": 2,
     },
 
     "model" : {
-        "out_dim" : 41
-    }
+        "out_dim" : 41 + 1, #one unknown
+        "name": "cnn_naive",
+        "learning_rate" : 0.001
+    },
+
 }

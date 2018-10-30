@@ -7,12 +7,14 @@ class ModelsFactory():
 
     model_path = {
         "cnn_beginners_model" : "shabda.models.cnn_beginners_model",
-        "cnn_naive_model": "shabda.models.cnn_naive_model",
+        "cnn_naive_model": "shabda.models.clasifiers.cnn_naive_model",
+        "naive_lstm" : "shabda.models.clasifiers.naive_lstm"
     }
 
     models = {
         "cnn_beginners_model" :  "CustomDNN",
         "cnn_naive_model" : "CustomDNN",
+        "naive_lstm" : "NaiveLSTM"
     }
 
 

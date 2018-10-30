@@ -3,7 +3,7 @@ import json
 import os
 
 from shabda.hyperparams.hyperparams import HParams
-from shabda.helpers import utils
+from shabda.helpers.print_helper import *
 
 class AudioDatasetBase(object):
     def __init__(self, hparams):
@@ -105,6 +105,7 @@ class AudioDatasetBase(object):
 
         self._labels_dim = len(self._labels_2_index)
 
+
     def get_label_2_index(self, label):
         return self._labels_2_index.get(label, 0) #return unknown index when not found
 
@@ -112,8 +113,8 @@ class AudioDatasetBase(object):
         return self._index_2_labels.get(index,  self._unknown_label)
 
     def get_one_hot_encoded(self, label):
-        label = label.lower()
-        vector = np.zeros(self._labels_dim)
+        label = str(label.lower(), 'utf-8')
+        vector = np.zeros(self._labels_dim, dtype=int)
         index = self.get_label_2_index(label=label)
         vector[index] = 1
         return vector
