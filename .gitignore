@@ -1,6 +1,7 @@
 data/freesound-audio-tagging/input/audio_test/*
 data/freesound-audio-tagging/input/audio_train/*
 data/freesound-audio-tagging/input/*.csv
+notebooks/temp_data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

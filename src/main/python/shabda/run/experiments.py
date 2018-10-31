@@ -118,10 +118,11 @@ class Experiments(object):
         num_epochs = self._hparams.num_epochs
         mode = self.mode
 
-        exor = Executor(model=self.model, data_iterator=self._data_iterator, config=self._run_config)
+        exec = Executor(model=self.model, data_iterator=self._data_iterator, config=self._run_config)
 
         if (mode == "train" or mode == "retrain"):
             for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
                 current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
-                exor.train(max_steps=current_max_steps)#, eval_steps=None)
+                exec.train(max_steps=current_max_steps)#, eval_steps=None)
+                exec.evaluate(steps=200)
 

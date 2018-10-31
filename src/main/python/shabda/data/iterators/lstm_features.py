@@ -14,8 +14,7 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
             raise AssertionError("dataset should be FreeSoundAudioDataset")
 
     def append_zeros(self, required_dim, data, is_row=False):
-        rows = data.shape[0]
-        cols = data.shape[1]
+        rows, cols = data.shape
 
         new_rows = required_dim - rows
         new_cols = required_dim - cols
@@ -59,7 +58,7 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
         data[:, :, 14:26] = chroma.T[0:timeseries_length, :]
         data[:, :, 26:33] = spectral_contrast.T[0:timeseries_length, :]
 
-        #     print("Extracted features audio track %s." % audio_file)
+        #print("Extracted features audio track %s." % audio_file)
 
         return data  # , np.expand_dims(np.asarray(target), axis=1)
 

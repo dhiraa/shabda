@@ -55,9 +55,10 @@ class FreeSoundDataIteratorBase(DataIteratorBase):
         # dataset = dataset.shuffle(len(self._train_labels))
         # dataset.prefetch()
         # dataset = dataset.repeat(self._num_epochs)
-        dataset = dataset.map(self._user_resize_func)
+        dataset = dataset.map(self._user_resize_func, num_parallel_calls=4)
         dataset = dataset.prefetch(self._batch_size*2)
         dataset = dataset.batch(self._batch_size)
+        print_info("Dataset output sizes are: ")
         print_info(dataset.output_shapes)
 
 
@@ -72,11 +73,12 @@ class FreeSoundDataIteratorBase(DataIteratorBase):
             num_parallel_calls=4)
         # dataset = dataset.shuffle(len(self._val_labels))
         # dataset = dataset.repeat(self._num_epochs)
-        dataset = dataset.map(self._user_resize_func)
+        dataset = dataset.map(self._user_resize_func, num_parallel_calls=4)
 
         dataset = dataset.prefetch(self._batch_size*2)
         dataset = dataset.batch(self._batch_size)
 
+        print_info("Dataset output sizes are: ")
         print_info(dataset.output_shapes)
 
         return dataset

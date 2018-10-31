@@ -13,6 +13,7 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
         if not isinstance(dataset, FreeSoundAudioDataset):
             raise AssertionError("dataset should be FreeSoundAudioDataset")
 
+
     @overrides
     def _user_map_func(self, file_path, label):
         data, sample_rate = audio.load_wav_audio_file(file_path=file_path)
@@ -27,4 +28,13 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
         data = data.flatten(order="C") #row major
 
         label = self._dataset.get_one_hot_encoded(label)
+        return data, label
+
+    @overrides
+    def _user_resize_func(self, data, label):
+        # data.set_shape([None,None,None])
+        # label.set_shape([None, None])
+        # data = tf.image.resize_images(data, [128,33])
+        # data = tf.reshape(data, shape=[128,33])
+        # label = tf.reshape(label, shape=[42])
         return data, label

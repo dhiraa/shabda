@@ -1,0 +1,6 @@
+tqdm
+tensorflow-gpu
+pandas
+numpy
+sklearn
+overrides
