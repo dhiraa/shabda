@@ -5,7 +5,7 @@ from tqdm import tqdm
 import tensorflow as tf
 import logging
 
-
+from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
 from shabda.data.dataset.internal.dataset_factory import DatasetFactory
 from shabda.data.iterators.internal.data_iterator_factory import DataIteratorFactory
 from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
@@ -43,7 +43,7 @@ class Experiments(object):
         """
 
         print_debug("Geting dataset :" + dataset_name)
-        dataset =  DatasetFactory.get(dataset_name=dataset_name)
+        dataset =  DatasetFactory.get(dataset_file_name=dataset_name)
         return  dataset
 
     def get_iterator_reference(self, iterator_name):
@@ -88,7 +88,7 @@ class Experiments(object):
         self.model = self.get_model_reference(self._hparams.model_name)
 
         # Initialize the handles and call any user specific init() methods
-        self.dataset = self.dataset()
+        self.dataset: AudioDatasetBase = self.dataset(hparams=self._hparams[self._hparams['dataset_name']])
         self.dataset.init()
 
         self._data_iterator: DataIteratorBase  = self._data_iterator(hparams=self._hparams.data_iterator, dataset = self.dataset)

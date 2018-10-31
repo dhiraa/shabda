@@ -1,32 +1,85 @@
-import numpy as np
+# Copyright 2018 The Shabda Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Interface class for all Audio Datasets
+"""
+
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import division
+
+
 import json
 import os
+import numpy as np
 
 from shabda.hyperparams.hyperparams import HParams
 from shabda.helpers.print_helper import *
 
-class AudioDatasetBase(object):
+
+class AudioDatasetBase():
+    """
+
+    Interface class for Audio Datasets.
+    Any audio dataset is expected to inherit this class and give implementation.
+    AudioDataset expectations are:
+    - Provide list of training, validation and test files files
+    - Expose list of lables and predefined labels, which then can be used for label indexing
+
+    """
     def __init__(self, hparams):
         self._hparams = HParams(hparams, self.default_hparams())
 
+        self._labels = None
         self._labels_2_index = None
         self._index_2_labels = None
+        self._labels_dim = None
+        self._unknown_label = "_unknown_"
 
     def init(self):
+        """
+        Inheriting class must take care of implementing this method
+        Should call self._setup_labels() along with other initializations
+        :return: None
+        """
         raise NotImplementedError
 
     @staticmethod
     def default_hparams():
+        """
+        Exposes the default params for this module
+        :return: dict: params
+        """
         params = {
             "labels_index_map_store_path" : "/tmp/shabda/"
         }
         return params
 
     def get_labels_dim(self):
+        """
+        Returns the total number of labels in this dataset along with any deafault lables
+        like silent, back_ground_noise, if any.
+        :return: int
+        """
         return self._labels_dim
 
     def get_dataset_name(self):
-        return "audio_dataset_base"
+        """
+        Inheriting class must take care of implementing this method
+        :return: Name of the dataset
+        """
+        raise NotImplementedError
 
     def get_num_train_samples(self):
         """
@@ -77,14 +130,14 @@ class AudioDatasetBase(object):
         """
         raise NotImplementedError
 
-    def get_default_labels(self):
+    def get_predefined_labels(self):
         """
         Inheriting class must take care of implementing this method
-        :return: list of default lables. Eg: ["_silence_", "_background_noise_"]
+        :return: list of predefined lables. Eg: ["_silence_", "_background_noise_"]
         """
         raise NotImplementedError
 
-    def get_lables(self):
+    def get_labels(self):
         """
         Inheriting class must take care of implementing this method
         :return: List of lables for the dataset under consideration
@@ -92,44 +145,77 @@ class AudioDatasetBase(object):
         raise NotImplementedError
 
     def _setup_labels(self):
-        self._labels = self.get_lables()
-        self._labels = self.get_default_labels() + list(self._labels)
+        """
+        Sets up the label indexer.
+        Note: This needs to be called while the inheriting class is getting initialized
+        :return: None
+        """
+        self._labels = self.get_labels()
+        self._labels = self.get_predefined_labels() + list(self._labels)
         self._labels = sorted(self._labels)
 
         self._labels_2_index = {label.lower():i for i, label in enumerate(self._labels, 1)}
         self._index_2_labels = {i: label.lower() for label, i in self._labels_2_index.items()}
 
-        self._unknown_label = "_unknown_"
+        
         self._labels_2_index[ self._unknown_label] = 0
-        self._index_2_labels[0] =  self._unknown_label
+        self._index_2_labels[0] = self._unknown_label
 
         self._labels_dim = len(self._labels_2_index)
+        return None
 
 
     def get_label_2_index(self, label):
+        """
+        Returns the index of the label, considering the predefined labels
+        :param label: string
+        :return: index: int
+        """
         return self._labels_2_index.get(label, 0) #return unknown index when not found
 
     def get_index_2_label(self, index):
+        """
+        Returns the label string, considering the predefined labels
+        :param index: int
+        :return: label: string
+        """
         return self._index_2_labels.get(index,  self._unknown_label)
 
     def get_one_hot_encoded(self, label):
-        label = str(label.lower(), 'utf-8')
+        """
+        Returns the one-hot encoded array of the label
+        :param label: string
+        :return: np.array
+        """
+        label = str(label, 'utf-8')
+        label = label.lower()
         vector = np.zeros(self._labels_dim, dtype=int)
         index = self.get_label_2_index(label=label)
         vector[index] = 1
         return vector
 
     def store_labels_index_map(self):
-        dir = self._hparams["labels_index_map_store_path"] + "/" + self.get_dataset_name() + "/"
+        """
+        Stores teh current label index as json, as per the path
+        `labels_index_map_store_path` specified in the params
+        Full store path: labels_index_map_store_path/dataset_name/
+        :return: None
+        """
+        directory = self._hparams["labels_index_map_store_path"] + "/" + self.get_dataset_name() + "/"
         file_name = "labels_index_map.json"
 
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
-        with open(dir + file_name, 'w') as fp:
-            json.dump(self._labels_2_index, fp)
+        with open(directory + file_name, 'w') as file:
+            json.dump(self._labels_2_index, file)
 
     def load_labels_index_map(self, file_path):
+        """
+        Reads the JSON file from the path and loads them into dataset label indexer
+        :param file_path: File path of the JSON
+        :return: None
+        """
         with open(file_path) as handle:
             self._labels_2_index = json.loads(handle.read())
             self._index_2_labels = {i: label.lower() for label, i in self._labels_2_index.items()}

@@ -1,7 +1,7 @@
 """Example to run CNN naive Audio Classifier
 
 To run:
-$ python run.py --config=config
+$ python src/main/python/shabda/examples/cnn_naive_ccd /roor/of/shabda/lassifier/run.py --mode=train
 
 """
 import importlib

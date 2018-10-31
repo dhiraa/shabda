@@ -1,15 +1,31 @@
+# Copyright 2018 The Shabda Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+FreeSound dataset
+"""
+
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import division
+
 import pandas as pd
-import numpy as np
-import os
-from tqdm import tqdm
 from sklearn.model_selection import train_test_split
-import librosa
 from overrides import overrides
 
 from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
 from shabda.helpers.print_helper import *
-from shabda.hyperparams.hyperparams import HParams
-from shabda.helpers import audio
+
 
 class FreeSoundAudioDataset(AudioDatasetBase):
     """
@@ -81,15 +97,23 @@ class FreeSoundAudioDataset(AudioDatasetBase):
         return self.train_df.shape[0]
 
     @overrides
-    def get_lables(self):
+    def get_labels(self):
         return self.train_df["label"].unique()
 
     @overrides
-    def get_default_labels(self):
+    def get_predefined_labels(self):
+        """
+        No predefined labels
+        :return: list: empty
+        """
         return []
 
     @overrides
     def get_train_files(self):
+        """
+        Returns the list of train file paths from Freesound dataset
+        :return:
+        """
         files = []
         for fname in  self.train_df['fname']:
             files.append(self._hparams.train_audio_files_dir + "/" + fname)
@@ -97,6 +121,10 @@ class FreeSoundAudioDataset(AudioDatasetBase):
 
     @overrides
     def get_val_files(self):
+        """
+        Returns the list of validation file paths from Freesound dataset
+        :return:
+        """
         files = []
         for fname in self.val_df['fname']:
             files.append(self._hparams.val_audio_files_dir + "/" + fname)
@@ -105,15 +133,15 @@ class FreeSoundAudioDataset(AudioDatasetBase):
     @overrides
     def get_train_labels(self):
         """
-
+        Returns the list of train labels from Freesound dataset
         :return: list of one-hot encoded labels
         """
-        return self.train_df["label"]#.apply(lambda label : self.get_one_hot_encoded(label))
+        return self.train_df["label"]
 
     @overrides
     def get_val_labels(self):
         """
-
+        Returns the list of validation labels from Freesound dataset
         :return: list of one-hot encoded labels
         """
-        return self.val_df["label"]#.apply(lambda label : self.get_one_hot_encoded(label))
+        return self.val_df["label"]

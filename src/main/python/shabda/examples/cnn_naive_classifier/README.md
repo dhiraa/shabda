@@ -3,6 +3,6 @@
 **Train:**
 
 ```
-cd /roor/of/shabda/
-python src/main/python/shabda/examples/cnn_naive_classifier/run.py --mode=train
+
+python src/main/python/shabda/examples/cnn_naive_ccd /roor/of/shabda/lassifier/run.py --mode=train
 ```

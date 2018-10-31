@@ -43,14 +43,34 @@ CBEIGEBG2  = '\33[106m'
 CWHITEBG2  = '\33[107m'
 
 
-def print_info(text):
-    print(CGREEN2 + str(text) + CEND)
+def print_info(*args):
+    """
+    Prints the string in green color
+    :param args: user string information
+    :return: stdout
+    """
+    print(CGREEN2 + str(args) + CEND)
 
-def print_error(text):
-    print(CRED + str(text) + CEND)
+def print_error(*args):
+    """
+    Prints the string in red color
+    :param args: user string information
+    :return: stdout
+    """
+    print(CRED + str(args) + CEND)
 
-def print_warn(text):
-    print(CYELLOW2 + str(text) + CEND)
+def print_warn(*args):
+    """
+    Prints the string in yellow color
+    :param args: user string information
+    :return: stdout
+    """
+    print(CYELLOW2 + str(args) + CEND)
 
-def print_debug(text):
-    print(CBLUEBG2 + str(text) + CEND)
+def print_debug(*args):
+    """
+    Prints the string in blue color
+    :param args: user string information
+    :return: stdout
+    """
+    print(CBLUEBG2 + str(args) + CEND)

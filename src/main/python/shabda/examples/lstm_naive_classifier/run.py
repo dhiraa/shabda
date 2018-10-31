@@ -1,7 +1,7 @@
-"""Example to run CNN naive Audio Classifier
+"""Example to run LSTM naive Audio Classifier
 
 To run:
-$ python run.py --config=config
+$ python src/main/python/shabda/examples/lstm_naive_classifier/run.py --mode=train
 
 """
 import importlib
