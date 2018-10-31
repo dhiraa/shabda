@@ -46,7 +46,7 @@ class DatasetFactory():
     @staticmethod
     def _get_dataset(name):
         """
-        Finds the pacakage and gets the class handle for the dataset file name
+        Finds the package and gets the class handle for the dataset file name
         :param name:
         :return:
         """

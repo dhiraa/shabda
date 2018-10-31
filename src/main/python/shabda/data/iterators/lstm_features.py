@@ -1,3 +1,23 @@
+# Copyright 2018 The Shabda Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Iterator that creates features for LSTM based models
+"""
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import numpy as np
 import librosa
 import tensorflow as tf
@@ -14,6 +34,13 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
             raise AssertionError("dataset should be FreeSoundAudioDataset")
 
     def append_zeros(self, required_dim, data, is_row=False):
+        """
+
+        :param required_dim:
+        :param data:
+        :param is_row:
+        :return:
+        """
         rows, cols = data.shape
 
         new_rows = required_dim - rows
@@ -28,9 +55,16 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
             return np.hstack([data, np.zeros(shape=(rows, new_cols))])
 
     # References: https://github.com/ruohoruotsi/LSTM-Music-Genre-Classification
-    def extract_audio_features(self, audio_file, hop_length):
+    def extract_audio_features(self, audio_file, hop_length,  timeseries_length = 128):
+        """
+        Combine 4 audio features as one time series feature, namely : MFCC, Spectral Centroid,
+        Chroma STFT, Spectral Contrast
+        :param audio_file: Full path of the audio file
+        :param hop_length:
+        :return: [timeseries_length, 33]
+        """
         # timeseries_length = min(self.timeseries_length_list)
-        timeseries_length = 128
+
         data = np.zeros((1, timeseries_length, 33), dtype=np.float64)
         target = []
 
@@ -64,6 +98,12 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
 
     @overrides
     def _user_map_func(self, file_path, label):
+        """
+        Function that maps the audio files into features and labels as on-hot vector
+        :param file_path:
+        :param label:
+        :return:
+        """
         data = self.extract_audio_features(audio_file=file_path, hop_length=512)
 
         label = self._dataset.get_one_hot_encoded(label)
@@ -71,9 +111,12 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
 
     @overrides
     def _user_resize_func(self, data, label):
-        # data.set_shape([None,None,None])
-        # label.set_shape([None, None])
-        # data = tf.image.resize_images(data, [128,33])
+        """
+        Function that sets up the sizes of the tensor, after execution of `tf.py_func` call
+        :param data:
+        :param label:
+        :return:
+        """
         data = tf.reshape(data, shape=[128,33])
         label = tf.reshape(label, shape=[42])
         return data, label

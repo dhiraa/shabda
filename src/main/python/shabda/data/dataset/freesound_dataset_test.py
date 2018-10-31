@@ -24,3 +24,5 @@ class FreeSoundDatasetTest(tf.test.TestCase):
         assert len(labels) == 41
 
 
+if __name__ == '__main__':
+    unittest.main()
