@@ -93,7 +93,7 @@ class FreeSoundDataIteratorBase(DataIteratorBase):
         dataset = tf.data.Dataset.from_tensor_slices((self._val_files_path, self._val_labels))
         dataset = dataset.map(
             lambda filename, label: tuple(tf.py_func(
-                self._user_map_func, [filename, label], [tf.double, label.dtype])),
+                self._user_map_func, [filename, label], [tf.double, tf.int64])),
             num_parallel_calls=4)
         # dataset = dataset.shuffle(len(self._val_labels))
         # dataset = dataset.repeat(self._num_epochs)
