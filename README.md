@@ -44,9 +44,15 @@ pip install -r requirements
 
 ```
 
+-----------------------------------------------------------------------------------------------------------------------
+
+## [Examples](src/main/python/shabda/examples)
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
 
 
 
 # Other notatble Audio Repos
 - https://github.com/mozilla/DeepSpeech
-- https://towardsdatascience.com/how-to-use-dataset-in-tensorflow-c758ef9e4428

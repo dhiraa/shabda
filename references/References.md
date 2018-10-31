@@ -15,3 +15,4 @@
 - https://sourcediving.com/machine-learning-on-mobile-fc34be69df1a
 - https://blog.insightdatascience.com/ok-google-how-do-you-run-deep-learning-inference-on-android-using-tensorflow-c39fd00c427b **Java MFCC**
 - https://www.simplifiedcoding.net/android-speech-to-text-tutorial/  **Android UI**
+- https://towardsdatascience.com/how-to-use-dataset-in-tensorflow-c758ef9e4428
