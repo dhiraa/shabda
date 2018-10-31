@@ -1,13 +1,11 @@
 ## Introduction
 
-Deep Learning models proven its power in many application areas in recent times, however its entry into embedded world 
-as its own twists and practical difficulties. 
+In recent past, Deep Learning models have proven their potential in many application areas, however its entry into embedded world has its own twists and practical difficulties.
 
 ## Problem Statement
 
-Come up with a framework that enables fast prototyping of Deep Learning models for Audio (to start with!) and provide a 
-easy way to port the models on to Android using TFLite.  
- 
+To come up with a framework that enables a fast prototyping of Deep Learning models for Audio (to start with!) and provides an easy way to port the models on to Android using TFLite.
+
 ## Proposed Solution
 
 Come up with following modular components which can be then used as plug and play components:
@@ -19,6 +17,8 @@ Come up with following modular components which can be then used as plug and pla
     - Web app
     - Mobile
 
+## Architecture
+
 ![](docs/images/shabda_stack.png)
 
 ## [Dataset](data)
@@ -26,7 +26,7 @@ Come up with following modular components which can be then used as plug and pla
 - Speech Recognition
     - [Kaggle](https://www.kaggle.com/c/tensorflow-speech-recognition-challenge)
     - [Google](https://www.tensorflow.org/tutorials/sequences/audio_recognition)
-    
+
 
 -----------------------------------------------------------------------------------------------------------------------
 
@@ -38,10 +38,9 @@ Come up with following modular components which can be then used as plug and pla
 ## Python Environment
 
 ```
-conda create -n shabda python=3.6 
+conda create -n shabda python=3.6
 source activate shabda
-pip install -r requirements
-
+pip install -r requirements.txt
 ```
 
 -----------------------------------------------------------------------------------------------------------------------
