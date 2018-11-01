@@ -38,6 +38,7 @@ class FreeSoundAudioDataset(AudioDatasetBase):
     Data can be downloaded to the `data` dir using the Kaggle API. Refer `data` dir for more info.
     """
     def __init__(self, hparams=None):
+        # TODO: test "super(AudioDatasetBase, self).__init__(self, hparams=hparams)"
         AudioDatasetBase.__init__(self, hparams=hparams)
 
         self.train_csv_path = self._hparams.train_csv_path
@@ -78,16 +79,15 @@ class FreeSoundAudioDataset(AudioDatasetBase):
         return "free_sound_dataset"
 
     def _load_data_info(self):
-        #fname label  manually_verified
+        # fname label manually_verified
         print_info("Train data info DF : " + self.train_csv_path)
         print_info("Test data info DF : " +  self.test_csv_path)
 
         # We use train_test_split API to split predicted_class set into tran and val set
+        self.train_df = pd.read_csv(self.train_csv_path)
         if self.val_csv_path == None:
-            self.train_df = pd.read_csv(self.train_csv_path)
             self.train_df, self.val_df = train_test_split(self.train_df, test_size=0.2)
         else:
-            self.train_df = pd.read_csv(self.train_csv_path)
             self.val_df = pd.read_csv(self.val_csv_path)
 
         self.test_df = pd.read_csv(self.test_csv_path)

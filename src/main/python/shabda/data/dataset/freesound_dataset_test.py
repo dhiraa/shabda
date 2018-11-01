@@ -4,7 +4,6 @@ from shabda.data.dataset.freesound_dataset import FreeSoundAudioDataset
 
 class FreeSoundDatasetTest(tf.test.TestCase):
 
-
     def test_init(self):
         dataset = FreeSoundAudioDataset()
         dataset.init()

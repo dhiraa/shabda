@@ -25,27 +25,28 @@ import os
 import numpy as np
 
 from shabda.hyperparams.hyperparams import HParams
+# TODO: dont use `from ... import *`
 from shabda.helpers.print_helper import *
 
 
-class AudioDatasetBase():
+class AudioDatasetBase(object):
     """
-
     Interface class for Audio Datasets.
+
     Any audio dataset is expected to inherit this class and give implementation.
     AudioDataset expectations are:
     - Provide list of training, validation and test files files
     - Expose list of lables and predefined labels, which then can be used for label indexing
-
     """
-    def __init__(self, hparams):
+    def __init__(self, hparams, unknown_label="_unknown_"):
         self._hparams = HParams(hparams, self.default_hparams())
+        self.is_init = False
 
         self._labels = None
         self._labels_2_index = None
         self._index_2_labels = None
         self._labels_dim = None
-        self._unknown_label = "_unknown_"
+        self._unknown_label = unknown_label
 
     def init(self):
         """
@@ -53,6 +54,7 @@ class AudioDatasetBase():
         Should call self._setup_labels() along with other initializations
         :return: None
         """
+        self.is_init = True
         raise NotImplementedError
 
     @staticmethod
@@ -154,12 +156,8 @@ class AudioDatasetBase():
         self._labels = self.get_predefined_labels() + list(self._labels)
         self._labels = sorted(self._labels)
 
-        self._labels_2_index = {label.lower():i for i, label in enumerate(self._labels, 1)}
-        self._index_2_labels = {i: label.lower() for label, i in self._labels_2_index.items()}
-
-        
-        self._labels_2_index[ self._unknown_label] = 0
-        self._index_2_labels[0] = self._unknown_label
+        self._labels_2_index = {label.lower():i for i, label in enumerate([self._unknown_label] + self._labels)}
+        self._index_2_labels = {i: label for label, i in self._labels_2_index.items()}
 
         self._labels_dim = len(self._labels_2_index)
         return None
@@ -187,27 +185,26 @@ class AudioDatasetBase():
         :param label: string
         :return: np.array
         """
-        label = str(label, 'utf-8')
-        label = label.lower()
+        label = str(label, 'utf-8').lower()
         vector = np.zeros(self._labels_dim, dtype=int)
         index = self.get_label_2_index(label=label)
         vector[index] = 1
         return vector
 
-    def store_labels_index_map(self):
+    def store_labels_index_map(self, file_name="labels_index_map.json"):
         """
         Stores teh current label index as json, as per the path
         `labels_index_map_store_path` specified in the params
         Full store path: labels_index_map_store_path/dataset_name/
         :return: None
         """
-        directory = self._hparams["labels_index_map_store_path"] + "/" + self.get_dataset_name() + "/"
-        file_name = "labels_index_map.json"
+        directory = os.path.join(self._hparams["labels_index_map_store_path"],
+                        self.get_dataset_name())
 
-        if not os.path.exists(directory):
+        if not os.path.isdir(directory):
             os.makedirs(directory)
 
-        with open(directory + file_name, 'w') as file:
+        with open(os.path.join(directory, file_name), 'w') as file:
             json.dump(self._labels_2_index, file)
 
     def load_labels_index_map(self, file_path):
