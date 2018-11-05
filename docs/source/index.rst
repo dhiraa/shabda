@@ -10,6 +10,8 @@ Welcome to shabda's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   get_started.md
+
 
 
 Indices and tables
