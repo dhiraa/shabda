@@ -1,0 +1,249 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>shabda.run.executor &#8212; shabda  documentation</title>
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">shabda  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for shabda.run.executor</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2018 The Shabda Authors. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A class that executes training, evaluation, prediction, export of estimators.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="kn">from</span> <span class="nn">shabda.helpers.utils</span> <span class="k">import</span> <span class="n">maybe_hparams_to_dict</span>
+
+<span class="c1"># pylint: disable=too-many-instance-attributes, too-many-arguments</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Executor&quot;</span>
+<span class="p">]</span>
+
+<div class="viewcode-block" id="Executor"><a class="viewcode-back" href="../../../code/run.html#shabda.run.Executor">[docs]</a><span class="k">class</span> <span class="nc">Executor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that executes training, evaluation, prediction, export, and other</span>
+<span class="sd">    actions of :tf_main:`Estimator &lt;estimator/Estimator&gt;`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: An instance of a subclass of</span>
+<span class="sd">            :class:`~texar.models.model_base.ModelBase`.</span>
+<span class="sd">        data_hparams: A `dict` or an instance of :class:`~texar.hparams.HParams`</span>
+<span class="sd">            containing the hyperparameters of data. It must contain `train`</span>
+<span class="sd">            and/or `eval` fields for relevant processes. For example, for</span>
+<span class="sd">            :meth:`train_and_evaluate`, both fields are required.</span>
+<span class="sd">        config: An instance of</span>
+<span class="sd">            :tf_main:`tf.estimator.RunConfig &lt;estimator/RunConfig&gt;`, used as</span>
+<span class="sd">            the :attr:`config` argument of</span>
+<span class="sd">            :tf_main:`Estimator &lt;estimator/Estimator#__init__&gt;`.</span>
+<span class="sd">        model_hparams (optional): A `dict` or an instance of</span>
+<span class="sd">            :class:`~texar.hparams.HParams` containing the hyperparameters of</span>
+<span class="sd">            the model. If `None`, uses :attr:`model.hparams`. Used as</span>
+<span class="sd">            the :attr:`params` argument of</span>
+<span class="sd">            :tf_main:`Estimator &lt;estimator/Estimator#__init__&gt;`.</span>
+<span class="sd">        train_hooks (optional): Iterable of :tf_main:`tf.train.SessionRunHook</span>
+<span class="sd">            &lt;train/SessionRunHook&gt;` objects to run during training.</span>
+<span class="sd">        eval_hooks (optional): Iterable of :tf_main:`tf.train.SessionRunHook</span>
+<span class="sd">            &lt;train/SessionRunHook&gt;` objects to run during evaluation.</span>
+<span class="sd">        session_config (optional): An instance of</span>
+<span class="sd">            :tf_main:`tf.ConfigProto &lt;ConfigProto&gt;`, used as the :attr:`config`</span>
+<span class="sd">            argument of :tf_main:`tf session &lt;Session&gt;`.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            model = BasicSeq2seq(data_hparams, model_hparams)</span>
+<span class="sd">            exor = Executor(</span>
+<span class="sd">                model=model,</span>
+<span class="sd">                data_hparams=data_hparams,</span>
+<span class="sd">                config=run_config)</span>
+<span class="sd">            exor.train_and_evaluate(</span>
+<span class="sd">                max_train_steps=10000,</span>
+<span class="sd">                eval_steps=100)</span>
+
+<span class="sd">    See `bin/train.py` for the usage in detail.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">model</span><span class="p">,</span>
+                 <span class="n">data_iterator</span><span class="p">,</span>
+                 <span class="n">config</span><span class="p">,</span>
+                 <span class="n">model_hparams</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">train_hooks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">eval_hooks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">session_config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_iterator</span> <span class="o">=</span> <span class="n">data_iterator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_train_hooks</span> <span class="o">=</span> <span class="n">train_hooks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eval_hooks</span> <span class="o">=</span> <span class="n">eval_hooks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session_config</span> <span class="o">=</span> <span class="n">session_config</span>
+
+        <span class="k">if</span> <span class="n">model_hparams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model_hparams</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">hparams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model_hparams</span> <span class="o">=</span> <span class="n">maybe_hparams_to_dict</span><span class="p">(</span><span class="n">model_hparams</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">Estimator</span><span class="p">(</span>
+            <span class="n">model_fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model_hparams</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_train_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">input_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_iterator</span><span class="o">.</span><span class="n">get_train_input_fn</span><span class="p">()</span>
+        <span class="c1"># Estimators expect an input_fn to take no arguments.</span>
+        <span class="c1"># To work around this restriction, we use lambda to capture the arguments and provide the expected interface.</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">TrainSpec</span><span class="p">(</span>
+            <span class="n">input_fn</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span><span class="n">input_fn</span><span class="p">,</span>
+            <span class="n">max_steps</span><span class="o">=</span><span class="n">max_steps</span><span class="p">,</span>
+            <span class="n">hooks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_train_hooks</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_eval_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+        <span class="n">input_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_iterator</span><span class="o">.</span><span class="n">get_val_input_fn</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">EvalSpec</span><span class="p">(</span>
+            <span class="n">input_fn</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span><span class="n">input_fn</span><span class="p">,</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span>
+            <span class="n">hooks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_eval_hooks</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Executor.train"><a class="viewcode-back" href="../../../code/run.html#shabda.run.Executor.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trains the model. See :tf_main:`tf.estimator.Estimator.train</span>
+<span class="sd">        &lt;estimator/Estimator#train&gt;` for more details.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            max_steps (int, optional): Total number of steps for which</span>
+<span class="sd">                to train model. If `None`, train forever or until the train</span>
+<span class="sd">                data generates the OutOfRange exception. If OutOfRange occurs</span>
+<span class="sd">                in the middle, training stops before :attr:`max_steps` steps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">train_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_spec</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="n">max_steps</span><span class="p">)</span> <span class="c1">#TODO</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+            <span class="n">input_fn</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_iterator</span><span class="o">.</span><span class="n">get_train_input_fn</span><span class="p">(),</span> <span class="c1">#TODO</span>
+            <span class="n">hooks</span><span class="o">=</span><span class="n">train_spec</span><span class="o">.</span><span class="n">hooks</span><span class="p">,</span>
+            <span class="n">max_steps</span><span class="o">=</span><span class="n">train_spec</span><span class="o">.</span><span class="n">max_steps</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Executor.evaluate"><a class="viewcode-back" href="../../../code/run.html#shabda.run.Executor.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">checkpoint_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluates the model. See :tf_main:`tf.estimator.Estimator.evaluate</span>
+<span class="sd">        &lt;estimator/Estimator#evaluate&gt;` for more details.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            steps (int, optional): Number of steps for which to evaluate</span>
+<span class="sd">                model. If `None`, evaluates until the eval data raises an</span>
+<span class="sd">                OutOfRange exception.</span>
+<span class="sd">            checkpoint_path (str, optional): Path of a specific checkpoint to</span>
+<span class="sd">                evaluate. If `None`, the the latest checkpoint in</span>
+<span class="sd">                :attr:`config.model_dir` is used. If there are no checkpoints</span>
+<span class="sd">                in :attr:`model_dir`, evaluation is run with newly initialized</span>
+<span class="sd">                variables instead of restored from checkpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">eval_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_eval_spec</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span> <span class="c1">#TODO</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+            <span class="n">input_fn</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_iterator</span><span class="o">.</span><span class="n">get_val_input_fn</span><span class="p">(),</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">eval_spec</span><span class="o">.</span><span class="n">steps</span><span class="p">,</span>
+            <span class="n">hooks</span><span class="o">=</span><span class="n">eval_spec</span><span class="o">.</span><span class="n">hooks</span><span class="p">,</span>
+            <span class="n">checkpoint_path</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Executor.train_and_evaluate"><a class="viewcode-back" href="../../../code/run.html#shabda.run.Executor.train_and_evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">train_and_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_train_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eval_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Trains and evaluates the model. See</span>
+<span class="sd">        :tf_main:`tf.estimator.train_and_evaluate</span>
+<span class="sd">        &lt;estimator/train_and_evaluate&gt;` for more details.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            max_train_steps (int, optional): Total number of steps for which</span>
+<span class="sd">                to train model. If `None`, train forever or until the train</span>
+<span class="sd">                data generates the OutOfRange exception. If OutOfRange occurs</span>
+<span class="sd">                in the middle, training stops before :attr:`max_steps` steps.</span>
+<span class="sd">            eval_steps (int, optional): Number of steps for which to evaluate</span>
+<span class="sd">                model. If `None`, evaluates until the eval data raises an</span>
+<span class="sd">                OutOfRange exception.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">train_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_spec</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="n">max_train_steps</span><span class="p">)</span>
+        <span class="n">eval_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_eval_spec</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">eval_steps</span><span class="p">)</span>
+        <span class="n">tf</span><span class="o">.</span><span class="n">estimator</span><span class="o">.</span><span class="n">train_and_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="p">,</span> <span class="n">train_spec</span><span class="p">,</span> <span class="n">eval_spec</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">shabda  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Shabda Team.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
