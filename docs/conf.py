@@ -55,7 +55,6 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.extlinks',
     'sphinx.ext.githubpages',
-    'rinoh.frontend.sphinx' #for pdf generation
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -86,7 +85,7 @@ language = None
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = None
+pygments_style = 'sphinx'
 
 
 # -- Options for HTML output -------------------------------------------------
