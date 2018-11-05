@@ -19,7 +19,7 @@ Come up with following modular components which can be then used as plug and pla
 
 ## Architecture
 
-![](images/shabda_stack.png)
+![](../images/shabda_stack.png)
 
 ## [Dataset](data)
 - [FreeSound from Kaggle](https://www.kaggle.com/c/freesound-audio-tagging)
@@ -49,9 +49,3 @@ pip install -r requirements.txt
 
 
 -----------------------------------------------------------------------------------------------------------------------
-
-
-
-
-# Other notatble Audio Repos
-- https://github.com/mozilla/DeepSpeech

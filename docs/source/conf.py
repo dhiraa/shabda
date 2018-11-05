@@ -16,8 +16,8 @@ import sys
 import os
 from recommonmark.parser import CommonMarkParser
 from unittest.mock import MagicMock
-# sys.path.insert(0, os.path.abspath('.'))
-
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../src/main/python/'))
 
 # -- Project information -----------------------------------------------------
 

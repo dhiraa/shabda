@@ -8,11 +8,24 @@ Welcome to shabda's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: About:
 
-   get_started.md
+   about.md
 
+.. toctree::
+   :maxdepth: 2
+   :caption: References:
 
+   AudioBasics.md
+   References.md
+
+API
+====
+
+.. toctree::
+   :maxdepth: 2
+
+   code/run.rst
 
 Indices and tables
 ==================
