@@ -1,3 +1,0 @@
-about.md:24: [local] data
-about.md:33: [local] notebooks
-about.md:48: [local] src/main/python/shabda/examples

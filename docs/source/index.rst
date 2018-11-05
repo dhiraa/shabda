@@ -7,17 +7,11 @@ Welcome to shabda's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: About:
+   :maxdepth: 1
 
    about.md
-
-.. toctree::
-   :maxdepth: 2
-   :caption: References:
-
-   AudioBasics.md
-   References.md
+   references/AudioBasics.md
+   references/References.md
 
 API
 ====
@@ -31,6 +25,7 @@ API
    :maxdepth: 2
 
    code/run.rst
+   code/data.rst
 
 Indices and tables
 ==================

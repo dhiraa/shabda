@@ -1,4 +1,4 @@
-# Basics
+# Audio Basics
 
 **What Does the Unit kHz Mean in Digital Music?**
 
