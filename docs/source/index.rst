@@ -22,6 +22,11 @@ Welcome to shabda's documentation!
 API
 ====
 
+.. automodule:: shabda
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 .. toctree::
    :maxdepth: 2
 

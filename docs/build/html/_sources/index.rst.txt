@@ -22,10 +22,12 @@ Welcome to shabda's documentation!
 API
 ====
 
-.. toctree::
-   :maxdepth: 2
+.. automodule:: shabda
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-   code/run.rst
+
 
 Indices and tables
 ==================
