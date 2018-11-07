@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ModelBase &mdash; shabda  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="HParams" href="hparams.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> shabda
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/AudioBasics.html">Audio Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/References.html">Related Work</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="run.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">DatasetFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html#audiodatasetbase">AudioDatasetBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html#freesoundaudiodataset">FreeSoundAudioDataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hparams.html">HParams</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ModelBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#modelsfactory">ModelsFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#classifierbase">ClassifierBase</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">shabda</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>ModelBase</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/code/models.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="modelbase">
+<h1>ModelBase<a class="headerlink" href="#modelbase" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shabda.models.ModelBase">
+<em class="property">class </em><code class="descclassname">shabda.models.</code><code class="descname">ModelBase</code><span class="sig-paren">(</span><em>hparams=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/models/internal/model_base.html#ModelBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ModelBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base class inherited by all model classes.</p>
+<p>A model class implements interfaces that are compatible with
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator">TF Estimator</a>. In particular,
+<a class="reference internal" href="#shabda.models.ModelBase._build" title="shabda.models.ModelBase._build"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_build()</span></code></a> implements the
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#__init__">model_fn</a> interface; and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_input_fn()</span></code> is for the <code class="xref py py-attr docutils literal notranslate"><span class="pre">input_fn</span></code> interface.</p>
+<dl class="method">
+<dt id="shabda.models.ModelBase._build">
+<code class="descname">_build</code><span class="sig-paren">(</span><em>features</em>, <em>labels</em>, <em>params</em>, <em>mode</em>, <em>config=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/models/internal/model_base.html#ModelBase._build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ModelBase._build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for the <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#__init__">model_fn</a>
+argument when constructing
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator">tf.estimator.Estimator</a>.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="shabda.models.ModelBase.default_hparams">
+<em class="property">static </em><code class="descname">default_hparams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/models/internal/model_base.html#ModelBase.default_hparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ModelBase.default_hparams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of hyperparameters with default values.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="shabda.models.ModelBase.hparams">
+<code class="descname">hparams</code><a class="headerlink" href="#shabda.models.ModelBase.hparams" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">HParams</span></code> instance. The hyperparameters
+of the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="modelsfactory">
+<h1>ModelsFactory<a class="headerlink" href="#modelsfactory" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shabda.models.ModelsFactory">
+<em class="property">class </em><code class="descclassname">shabda.models.</code><code class="descname">ModelsFactory</code><a class="reference internal" href="../_modules/shabda/models/internal/model_factory.html#ModelsFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ModelsFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Factory class to import the models dynamically.
+This is used in conjuction with experiments, where dataset can be plugged in
+with the change of the filename</p>
+<dl class="staticmethod">
+<dt id="shabda.models.ModelsFactory.get">
+<em class="property">static </em><code class="descname">get</code><span class="sig-paren">(</span><em>model_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/models/internal/model_factory.html#ModelsFactory.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ModelsFactory.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the class handle for the given file name
+:param dataset_file_name:
+:return: class handle</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="classifierbase">
+<h1>ClassifierBase<a class="headerlink" href="#classifierbase" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="shabda.models.ClassifierBase">
+<em class="property">class </em><code class="descclassname">shabda.models.</code><code class="descname">ClassifierBase</code><span class="sig-paren">(</span><em>hparams</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/models/clasifiers/classifer_base.html#ClassifierBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ClassifierBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">shabda.models.internal.model_base.ModelBase</span></code></p>
+<p>Base class for classification models</p>
+<dl class="staticmethod">
+<dt id="shabda.models.ClassifierBase.default_hparams">
+<em class="property">static </em><code class="descname">default_hparams</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/models/clasifiers/classifer_base.html#ClassifierBase.default_hparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.models.ClassifierBase.default_hparams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of hyperparameters with default values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="hparams.html" class="btn btn-neutral" title="HParams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Shabda Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

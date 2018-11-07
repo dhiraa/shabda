@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>shabda.hyperparams.hyperparams &mdash; shabda  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> shabda
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references/AudioBasics.html">Audio Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references/References.html">Related Work</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/run.html">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/data.html">DatasetFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/data.html#audiodatasetbase">AudioDatasetBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/data.html#freesoundaudiodataset">FreeSoundAudioDataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/hparams.html">HParams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/models.html">ModelBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/models.html#modelsfactory">ModelsFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code/models.html#classifierbase">ClassifierBase</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">shabda</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>shabda.hyperparams.hyperparams</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for shabda.hyperparams.hyperparams</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2018 The Shabda Authors. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Hyperparameter manager</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;HParams&quot;</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">is_callable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return `True` if :attr:`x` is callable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_is_callable</span> <span class="o">=</span> <span class="n">callable</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span> <span class="c1"># pylint: disable=bare-except</span>
+        <span class="n">_is_callable</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_is_callable</span>
+
+<span class="k">def</span> <span class="nf">_type_name</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+
+<div class="viewcode-block" id="HParams"><a class="viewcode-back" href="../../../code/hparams.html#shabda.hyperparams.HParams">[docs]</a><span class="k">class</span> <span class="nc">HParams</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A class that maintains hyperparameters for configing Shabda modules.</span>
+<span class="sd">    The class has several useful features:</span>
+
+<span class="sd">    - **Auto-completion of missing values.** Users can specify only a subset of\</span>
+<span class="sd">    hyperparameters they care about. Other hyperparameters will automatically\</span>
+<span class="sd">    take the default values. The auto-completion performs **recursively** so \</span>
+<span class="sd">    that hyperparameters taking `dict` values will also be auto-completed \</span>
+<span class="sd">    **All Shabda modules** provide a \</span>
+<span class="sd">    :meth:`default_hparams` containing allowed hyperparameters and their \</span>
+<span class="sd">    default values. For example</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            ## Recursive auto-completion</span>
+<span class="sd">            default_hparams = {&quot;a&quot;: 1, &quot;b&quot;: {&quot;c&quot;: 2, &quot;d&quot;: 3}}</span>
+<span class="sd">            hparams = {&quot;b&quot;: {&quot;c&quot;: 22}}</span>
+<span class="sd">            hparams_ = HParams(hparams, default_hparams)</span>
+<span class="sd">            hparams_.todict() == {&quot;a&quot;: 1, &quot;b&quot;: {&quot;c&quot;: 22, &quot;d&quot;: 3}}</span>
+<span class="sd">                # &quot;a&quot; and &quot;d&quot; are auto-completed</span>
+
+<span class="sd">            ## All Shabda modules have built-in `default_hparams`</span>
+<span class="sd">            hparams = {&quot;dropout_rate&quot;: 0.1}</span>
+<span class="sd">            emb = tx.modules.WordEmbedder(hparams=hparams, )</span>
+<span class="sd">            emb.hparams.todict() == {</span>
+<span class="sd">                &quot;dropout_rate&quot;: 0.1,  # provided value</span>
+<span class="sd">                &quot;dim&quot;: 100            # default value</span>
+<span class="sd">                </span>
+<span class="sd">            }</span>
+
+<span class="sd">    - **Automatic typecheck.** For most hyperparameters, provided value must\</span>
+<span class="sd">    have the same or compatible dtype with the default value. HParams does\</span>
+<span class="sd">    necessary typecheck, and raises Error if improper dtype is provided.\</span>
+<span class="sd">    Also, hyperparameters not listed in `default_hparams` are not allowed,\</span>
+<span class="sd">    except for &quot;kwargs&quot; as detailed below.</span>
+
+<span class="sd">    - **Flexible dtype for specified hyperparameters.**  Some hyperparameters\</span>
+<span class="sd">    may allow different dtypes of values.</span>
+
+<span class="sd">        - Hyperparameters named &quot;type&quot; are not typechecked.\</span>
+<span class="sd">        For example, in :func:`~texar.core.get_rnn_cell`, hyperparameter \</span>
+<span class="sd">        `&quot;type&quot;` can take value of an RNNCell class, its string name of module \</span>
+<span class="sd">        path, or an RNNCell class instance. (String name or module path is \</span>
+<span class="sd">        allowd so that users can specify the value in YAML config files.)</span>
+
+<span class="sd">        - For other hyperparameters, list them\</span>
+<span class="sd">        in the &quot;@no_typecheck&quot; field in `default_hparams` to skip typecheck. \</span>
+<span class="sd">        For example, in :func:`~texar.core.get_rnn_cell`, hyperparameter \</span>
+<span class="sd">        &quot;_keep_prob&quot; can be set to either a `float` or a `tf.placeholder`.</span>
+
+<span class="sd">    - **Special flexibility of keyword argument hyparameters.** \</span>
+<span class="sd">    Hyperparameters named &quot;kwargs&quot; are used as keyword arguments for a class\</span>
+<span class="sd">    constructor or a function call. Such hyperparameters take a `dict`, and \</span>
+<span class="sd">    users can add arbitrary valid keyword arguments to the dict. For example:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            default_rnn_cell_hparams = {</span>
+<span class="sd">                &quot;type&quot;: &quot;BasicLSTMCell&quot;,</span>
+<span class="sd">                &quot;kwargs&quot;: { &quot;num_units&quot;: 256 }</span>
+<span class="sd">                # Other hyperparameters</span>
+<span class="sd">                </span>
+<span class="sd">            }</span>
+<span class="sd">            my_hparams = {</span>
+<span class="sd">                &quot;kwargs&quot; {</span>
+<span class="sd">                    &quot;num_units&quot;: 123,</span>
+<span class="sd">                    &quot;forget_bias&quot;: 0.0         # Other valid keyword arguments</span>
+<span class="sd">                    &quot;activation&quot;: &quot;tf.nn.relu&quot; # for BasicLSTMCell constructor</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+<span class="sd">            _ = HParams(my_hparams, default_rnn_cell_hparams)</span>
+
+<span class="sd">    - **Rich interfaces.** An HParams instance provides rich interfaces for\</span>
+<span class="sd">    accessing, updating, or adding hyperparameters.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            hparams = HParams(my_hparams, default_hparams)</span>
+<span class="sd">            # Access</span>
+<span class="sd">            hparams.type == hparams[&quot;type&quot;]</span>
+<span class="sd">            # Update</span>
+<span class="sd">            hparams.type = &quot;GRUCell&quot;</span>
+<span class="sd">            hparams.kwargs = { &quot;num_units&quot;: 100 }</span>
+<span class="sd">            hparams.kwargs.num_units == 100</span>
+<span class="sd">            # Add new</span>
+<span class="sd">            hparams.add_hparam(&quot;index&quot;, 1)</span>
+<span class="sd">            hparams.index == 1</span>
+
+<span class="sd">            # Convert to `dict` (recursively)</span>
+<span class="sd">            type(hparams.todic()) == dict</span>
+
+<span class="sd">            # I/O</span>
+<span class="sd">            pickle.dump(hparams, &quot;hparams.dump&quot;)</span>
+<span class="sd">            with open(&quot;hparams.dump&quot;, &#39;rb&#39;) as f:</span>
+<span class="sd">                hparams_loaded = pickle.load(f)</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        hparams: A `dict` or an `HParams` instance containing hyperparameters.</span>
+<span class="sd">            If `None`, all hyperparameters are set to default values.</span>
+<span class="sd">        default_hparams (dict): Hyperparameters with default values. If `None`,</span>
+<span class="sd">            Hyperparameters are fully defined by :attr:`hparams`.</span>
+<span class="sd">        allow_new_hparam (bool): If `False` (default), :attr:`hparams` cannot</span>
+<span class="sd">            contain hyperparameters that are not included in</span>
+<span class="sd">            :attr:`default_hparams`, except for the case of :attr:`&quot;kwargs&quot;` as</span>
+<span class="sd">            above.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># - The default hyperparameters in :attr:`&quot;kwargs&quot;` are used (for typecheck\</span>
+    <span class="c1"># and complementing missing hyperparameters) only when :attr:`&quot;type&quot;` \</span>
+    <span class="c1"># takes default value (i.e., missing in :attr:`hparams` or set to \</span>
+    <span class="c1"># the same value with the default). In this case :attr:`kwargs` allows to \</span>
+    <span class="c1"># contain new keys not included in :attr:`default_hparams[&quot;kwargs&quot;]`.</span>
+    <span class="c1">#</span>
+    <span class="c1"># - If :attr:`&quot;type&quot;` is set to an other \</span>
+    <span class="c1"># value and :attr:`&quot;kwargs&quot;` is missing in :attr:`hparams`, \</span>
+    <span class="c1"># :attr:`&quot;kwargs&quot;` is set to an empty dictionary.</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hparams</span><span class="p">,</span> <span class="n">default_hparams</span><span class="p">,</span> <span class="n">allow_new_hparam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hparams</span><span class="p">,</span> <span class="n">HParams</span><span class="p">):</span>
+            <span class="n">hparams</span> <span class="o">=</span> <span class="n">hparams</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">default_hparams</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parsed_hparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span>
+                <span class="n">hparams</span><span class="p">,</span> <span class="n">default_hparams</span><span class="p">,</span> <span class="n">allow_new_hparam</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parsed_hparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="n">hparams</span><span class="p">,</span> <span class="n">hparams</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">HParams</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="s1">&#39;_hparams&#39;</span><span class="p">,</span> <span class="n">parsed_hparams</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="n">hparams</span><span class="p">,</span> <span class="c1"># pylint: disable=too-many-branches, too-many-statements</span>
+               <span class="n">default_hparams</span><span class="p">,</span>
+               <span class="n">allow_new_hparam</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parses hyperparameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hparams (dict): Hyperparameters. If `None`, all hyperparameters are</span>
+<span class="sd">                set to default values.</span>
+<span class="sd">            default_hparams (dict): Hyperparameters with default values.</span>
+<span class="sd">                If `None`,Hyperparameters are fully defined by :attr:`hparams`.</span>
+<span class="sd">            allow_new_hparam (bool): If `False` (default), :attr:`hparams`</span>
+<span class="sd">                cannot contain hyperparameters that are not included in</span>
+<span class="sd">                :attr:`default_hparams`, except the case of :attr:`&quot;kwargs&quot;`.</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            A dictionary of parsed hyperparameters. Returns `None` if both</span>
+<span class="sd">            :attr:`hparams` and :attr:`default_hparams` are `None`.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If :attr:`hparams` is not `None` and</span>
+<span class="sd">                :attr:`default_hparams` is `None`.</span>
+<span class="sd">            ValueError: If :attr:`default_hparams` contains &quot;kwargs&quot; not does</span>
+<span class="sd">                not contains &quot;type&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">hparams</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">default_hparams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">hparams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">HParams</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="n">default_hparams</span><span class="p">,</span> <span class="n">default_hparams</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">default_hparams</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`default_hparams` cannot be `None` if `hparams` &quot;</span>
+                             <span class="s2">&quot;is not `None`.&quot;</span><span class="p">)</span>
+        <span class="n">no_typecheck_names</span> <span class="o">=</span> <span class="n">default_hparams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@no_typecheck&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;kwargs&quot;</span> <span class="ow">in</span> <span class="n">default_hparams</span> <span class="ow">and</span> <span class="s2">&quot;type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">default_hparams</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Ill-defined hyperparameter structure: &#39;kwargs&#39; &quot;</span>
+                             <span class="s2">&quot;must accompany with &#39;type&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="n">parsed_hparams</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">default_hparams</span><span class="p">)</span>
+
+        <span class="c1"># Parse recursively for params of type dictionary that are missing</span>
+        <span class="c1"># in `hparams`.</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">default_hparams</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hparams</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;kwargs&quot;</span> <span class="ow">and</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">hparams</span> <span class="ow">and</span> \
+                        <span class="n">hparams</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">default_hparams</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]:</span>
+                    <span class="c1"># Set params named &quot;kwargs&quot; to empty dictionary if &quot;type&quot;</span>
+                    <span class="c1"># takes value other than default.</span>
+                    <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">({},</span> <span class="p">{})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># Parse hparams</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">hparams</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">default_hparams</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">allow_new_hparam</span><span class="p">:</span>
+                    <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="o">.</span><span class="n">_parse_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Unknown hyperparameter: </span><span class="si">%s</span><span class="s2">. Only hyperparameters &quot;</span>
+                        <span class="s2">&quot;named &#39;kwargs&#39; hyperparameters can contain new &quot;</span>
+                        <span class="s2">&quot;entries undefined in default hyperparameters.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="n">HParams</span><span class="o">.</span><span class="n">_parse_value</span><span class="p">(</span><span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+
+            <span class="n">default_value</span> <span class="o">=</span> <span class="n">default_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">default_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="o">.</span><span class="n">_parse_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Parse recursively for params of type dictionary.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">no_typecheck_names</span> \
+                        <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default_value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Hyperparameter &#39;</span><span class="si">%s</span><span class="s2">&#39; must have type </span><span class="si">%s</span><span class="s2">, got </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                        <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">_type_name</span><span class="p">(</span><span class="n">default_value</span><span class="p">),</span> <span class="n">_type_name</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">hparams</span> <span class="ow">and</span> \
+                            <span class="n">hparams</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">default_hparams</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]:</span>
+                        <span class="c1"># Leave &quot;kwargs&quot; as-is if &quot;type&quot; takes value</span>
+                        <span class="c1"># other than default.</span>
+                        <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Allow new hyperparameters if &quot;type&quot; takes default</span>
+                        <span class="c1"># value</span>
+                        <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">(</span>
+                            <span class="n">value</span><span class="p">,</span> <span class="n">default_value</span><span class="p">,</span> <span class="n">allow_new_hparam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">no_typecheck_names</span><span class="p">:</span>
+                    <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">(</span>
+                        <span class="n">value</span><span class="p">,</span> <span class="n">default_value</span><span class="p">,</span> <span class="n">allow_new_hparam</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Do not type-check hyperparameter named &quot;type&quot; and accompanied</span>
+            <span class="c1"># with &quot;kwargs&quot;</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;type&quot;</span> <span class="ow">and</span> <span class="s2">&quot;kwargs&quot;</span> <span class="ow">in</span> <span class="n">default_hparams</span><span class="p">:</span>
+                <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">no_typecheck_names</span><span class="p">:</span>
+                <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">default_value</span><span class="p">)):</span>
+                <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">is_callable</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_callable</span><span class="p">(</span><span class="n">default_value</span><span class="p">):</span>
+                <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">parsed_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">default_value</span><span class="p">)(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Hyperparameter &#39;</span><span class="si">%s</span><span class="s2">&#39; must have type </span><span class="si">%s</span><span class="s2">, got </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                        <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">_type_name</span><span class="p">(</span><span class="n">default_value</span><span class="p">),</span> <span class="n">_type_name</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">parsed_hparams</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">HParams</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves the value of the hyperparameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;_hparams&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">HParams</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="s1">&#39;_hparams&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">:</span>
+            <span class="c1"># Raise AttributeError to allow copy.deepcopy, etc</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Unknown hyperparameter: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves the value of the hyperparameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the value of the hyperparameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Unknown hyperparameter: </span><span class="si">%s</span><span class="s2">. Only the `kwargs` &quot;</span>
+                <span class="s2">&quot;hyperparameters can contain new entries undefined &quot;</span>
+                <span class="s2">&quot;in default hyperparameters.&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HParams.items"><a class="viewcode-back" href="../../../code/hparams.html#shabda.hyperparams.HParams.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the list of hyperparam `(name, value)` pairs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HParams.keys"><a class="viewcode-back" href="../../../code/hparams.html#shabda.hyperparams.HParams.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the list of hyperparam names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a string of the hparams.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hparams_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">hparams_dict</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HParams.get"><a class="viewcode-back" href="../../../code/hparams.html#shabda.hyperparams.HParams.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the hyperparameter value for the given name. If name is not</span>
+<span class="sd">        available then returns :attr:`default`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): the name of hyperparameter.</span>
+<span class="sd">            default: the value to be returned in case name does not exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span></div>
+
+<div class="viewcode-block" id="HParams.add_hparam"><a class="viewcode-back" href="../../../code/hparams.html#shabda.hyperparams.HParams.add_hparam">[docs]</a>    <span class="k">def</span> <span class="nf">add_hparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a new hyperparameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Hyperparameter name already exists: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_value</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HParams.todict"><a class="viewcode-back" href="../../../code/hparams.html#shabda.hyperparams.HParams.todict">[docs]</a>    <span class="k">def</span> <span class="nf">todict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a copy of hyperparameters as a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dict_</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hparams</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">HParams</span><span class="p">):</span>
+                <span class="n">dict_</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">todict</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">dict_</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Shabda Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
