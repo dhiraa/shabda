@@ -26,6 +26,8 @@ API
 
    code/run.rst
    code/data.rst
+   code/hparams.rst
+   code/models.rst
 
 Indices and tables
 ==================

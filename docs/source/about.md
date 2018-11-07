@@ -30,11 +30,9 @@ Come up with following modular components which can be then used as plug and pla
     - [Google](https://www.tensorflow.org/tutorials/sequences/audio_recognition)
 
 
------------------------------------------------------------------------------------------------------------------------
 
 ## [Notebooks](notebooks)
 
------------------------------------------------------------------------------------------------------------------------
 
 
 ## Python Environment
@@ -45,9 +43,7 @@ source activate shabda
 pip install -r requirements.txt
 ```
 
------------------------------------------------------------------------------------------------------------------------
 
 ## [Examples](src/main/python/shabda/examples)
 
 
------------------------------------------------------------------------------------------------------------------------

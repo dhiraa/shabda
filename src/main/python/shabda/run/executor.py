@@ -30,12 +30,12 @@ __all__ = [
 
 class Executor(object):
     """Class that executes training, evaluation, prediction, export, and other
-    actions of :tf_main:`Estimator <estimator/Estimator>`.
+    actions of :tf_main:`tf.estimator.Estimator <estimator/Estimator>`.
 
     Args:
         model: An instance of a subclass of
-            :class:`~texar.models.model_base.ModelBase`.
-        data_hparams: A `dict` or an instance of :class:`~texar.hparams.HParams`
+            :class:`~shabda.models.model_base.ModelBase`.
+        data_hparams: A `dict` or an instance of :class:`~shabda.hparams.HParams`
             containing the hyperparameters of data. It must contain `train`
             and/or `eval` fields for relevant processes. For example, for
             :meth:`train_and_evaluate`, both fields are required.
@@ -44,14 +44,14 @@ class Executor(object):
             the :attr:`config` argument of
             :tf_main:`Estimator <estimator/Estimator#__init__>`.
         model_hparams (optional): A `dict` or an instance of
-            :class:`~texar.hparams.HParams` containing the hyperparameters of
+            :class:`~shabda.hparams.HParams` containing the hyperparameters of
             the model. If `None`, uses :attr:`model.hparams`. Used as
             the :attr:`params` argument of
             :tf_main:`Estimator <estimator/Estimator#__init__>`.
-        train_hooks (optional): Iterable of :tf_main:`tf.train.SessionRunHook
-            <train/SessionRunHook>` objects to run during training.
-        eval_hooks (optional): Iterable of :tf_main:`tf.train.SessionRunHook
-            <train/SessionRunHook>` objects to run during evaluation.
+        train_hooks (optional): Iterable of :tf_main:`tf.train.SessionRunHook <train/SessionRunHook>`
+            objects to run during training.
+        eval_hooks (optional): Iterable of :tf_main:`tf.train.SessionRunHook <train/SessionRunHook>`
+            objects to run during evaluation.
         session_config (optional): An instance of
             :tf_main:`tf.ConfigProto <ConfigProto>`, used as the :attr:`config`
             argument of :tf_main:`tf session <Session>`.
@@ -60,14 +60,7 @@ class Executor(object):
 
         .. code-block:: python
 
-            model = BasicSeq2seq(data_hparams, model_hparams)
-            exor = Executor(
-                model=model,
-                data_hparams=data_hparams,
-                config=run_config)
-            exor.train_and_evaluate(
-                max_train_steps=10000,
-                eval_steps=100)
+            TODO
 
     See `bin/train.py` for the usage in detail.
     """

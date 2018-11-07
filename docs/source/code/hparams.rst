@@ -1,10 +1,9 @@
 .. role:: hidden
     :class: hidden-section
 
-Executor
-********
+HParams
+*******
 
-.. autoclass:: shabda.run.Executor
+.. autoclass:: shabda.hyperparams.HParams
     :members:
-    :undoc-members:
     :show-inheritance:

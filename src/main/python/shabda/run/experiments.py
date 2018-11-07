@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Factory class to get data iterator for experiments
+Experiments class that allows easy plug n play of modules
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -42,6 +42,12 @@ CGREEN2  = '\33[92m'
 CEND      = '\33[0m'
 
 class Experiments(object):
+    """
+    Experiments uses dataset, data iterator & model factory classes and import them
+    dynamically based on the string.
+    This allows the user to choose the modules dynamically and run the experiments without ever writing the
+    code when we need mix and experiment dataset and modules.
+    """
     def __init__(self, hparams, mode='train'):
         self._hparams = HParams(hparams, self.default_hparams())
 

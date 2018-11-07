@@ -185,7 +185,10 @@ class AudioDatasetBase(object):
         :param label: string
         :return: np.array
         """
-        label = str(label, 'utf-8').lower()
+        try:
+            label = str(label, 'utf-8').lower()
+        except:
+            label = str(label).lower() #hack for pytest TODO
         vector = np.zeros(self._labels_dim, dtype=int)
         index = self.get_label_2_index(label=label)
         vector[index] = 1

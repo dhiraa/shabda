@@ -1,4 +1,4 @@
-# Copyright 2018 The Texar Authors. All Rights Reserved.
+# Copyright 2018 The Shabda Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ __all__ = [
 ]
 
 
-
 def is_callable(x):
     """Return `True` if :attr:`x` is callable.
     """
@@ -41,14 +40,14 @@ def _type_name(value):
     return type(value).__name__
 
 class HParams(object):
-    """A class that maintains hyperparameters for configing Texar modules.
+    """A class that maintains hyperparameters for configing Shabda modules.
     The class has several useful features:
 
     - **Auto-completion of missing values.** Users can specify only a subset of\
     hyperparameters they care about. Other hyperparameters will automatically\
     take the default values. The auto-completion performs **recursively** so \
     that hyperparameters taking `dict` values will also be auto-completed \
-    **All Texar modules** provide a \
+    **All Shabda modules** provide a \
     :meth:`default_hparams` containing allowed hyperparameters and their \
     default values. For example
 
@@ -61,7 +60,7 @@ class HParams(object):
             hparams_.todict() == {"a": 1, "b": {"c": 22, "d": 3}}
                 # "a" and "d" are auto-completed
 
-            ## All Texar modules have built-in `default_hparams`
+            ## All Shabda modules have built-in `default_hparams`
             hparams = {"dropout_rate": 0.1}
             emb = tx.modules.WordEmbedder(hparams=hparams, )
             emb.hparams.todict() == {
@@ -88,7 +87,7 @@ class HParams(object):
         - For other hyperparameters, list them\
         in the "@no_typecheck" field in `default_hparams` to skip typecheck. \
         For example, in :func:`~texar.core.get_rnn_cell`, hyperparameter \
-        "*_keep_prob" can be set to either a `float` or a `tf.placeholder`.
+        "_keep_prob" can be set to either a `float` or a `tf.placeholder`.
 
     - **Special flexibility of keyword argument hyparameters.** \
     Hyperparameters named "kwargs" are used as keyword arguments for a class\

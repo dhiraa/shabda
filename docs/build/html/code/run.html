@@ -1,85 +1,170 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Executor &#8212; shabda  documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Executor &mdash; shabda  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="../about.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="AudioDatasetBase" href="data.html" />
+    <link rel="next" title="DatasetFactory" href="data.html" />
     <link rel="prev" title="Related Work" href="../references/References.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="data.html" title="AudioDatasetBase"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../references/References.html" title="Related Work"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">shabda  documentation</a> &#187;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../references/References.html"
-                        title="previous chapter">Related Work</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="data.html"
-                        title="next chapter">AudioDatasetBase</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/code/run.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> shabda
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/AudioBasics.html">Audio Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/References.html">Related Work</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Executor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">DatasetFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html#audiodatasetbase">AudioDatasetBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html#freesoundaudiodataset">FreeSoundAudioDataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hparams.html">HParams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">ModelBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html#modelsfactory">ModelsFactory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html#classifierbase">ClassifierBase</a></li>
+</ul>
+
+            
+          
         </div>
       </div>
+    </nav>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">shabda</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Executor</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/code/run.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="executor">
 <h1>Executor<a class="headerlink" href="#executor" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="shabda.run.Executor">
 <em class="property">class </em><code class="descclassname">shabda.run.</code><code class="descname">Executor</code><span class="sig-paren">(</span><em>model</em>, <em>data_iterator</em>, <em>config</em>, <em>model_hparams=None</em>, <em>train_hooks=None</em>, <em>eval_hooks=None</em>, <em>session_config=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/run/executor.html#Executor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.run.Executor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class that executes training, evaluation, prediction, export, and other
-actions of <a href="#id1"><span class="problematic" id="id2">:tf_main:`Estimator &lt;estimator/Estimator&gt;`</span></a>.</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class that executes training, evaluation, prediction, export, and other
+actions of <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator">tf.estimator.Estimator</a>.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
@@ -90,34 +175,27 @@ actions of <a href="#id1"><span class="problematic" id="id2">:tf_main:`Estimator
 and/or <cite>eval</cite> fields for relevant processes. For example, for
 <a class="reference internal" href="#shabda.run.Executor.train_and_evaluate" title="shabda.run.Executor.train_and_evaluate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_and_evaluate()</span></code></a>, both fields are required.</dd>
 <dt>config: An instance of</dt>
-<dd><a href="#id3"><span class="problematic" id="id4">:tf_main:`tf.estimator.RunConfig &lt;estimator/RunConfig&gt;`</span></a>, used as
+<dd><a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/RunConfig">tf.estimator.RunConfig</a>, used as
 the <code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code> argument of
-<a href="#id5"><span class="problematic" id="id6">:tf_main:`Estimator &lt;estimator/Estimator#__init__&gt;`</span></a>.</dd>
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#__init__">Estimator</a>.</dd>
 <dt>model_hparams (optional): A <cite>dict</cite> or an instance of</dt>
 <dd><code class="xref py py-class docutils literal notranslate"><span class="pre">HParams</span></code> containing the hyperparameters of
 the model. If <cite>None</cite>, uses <code class="xref py py-attr docutils literal notranslate"><span class="pre">model.hparams</span></code>. Used as
 the <code class="xref py py-attr docutils literal notranslate"><span class="pre">params</span></code> argument of
-<a href="#id7"><span class="problematic" id="id8">:tf_main:`Estimator &lt;estimator/Estimator#__init__&gt;`</span></a>.</dd>
-<dt>train_hooks (optional): Iterable of :tf_main:<a href="#id9"><span class="problematic" id="id10">`</span></a>tf.train.SessionRunHook</dt>
-<dd>&lt;train/SessionRunHook&gt;` objects to run during training.</dd>
-<dt>eval_hooks (optional): Iterable of :tf_main:<a href="#id11"><span class="problematic" id="id12">`</span></a>tf.train.SessionRunHook</dt>
-<dd>&lt;train/SessionRunHook&gt;` objects to run during evaluation.</dd>
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#__init__">Estimator</a>.</dd>
+<dt>train_hooks (optional): Iterable of <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/train/SessionRunHook">tf.train.SessionRunHook</a></dt>
+<dd>objects to run during training.</dd>
+<dt>eval_hooks (optional): Iterable of <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/train/SessionRunHook">tf.train.SessionRunHook</a></dt>
+<dd>objects to run during evaluation.</dd>
 <dt>session_config (optional): An instance of</dt>
-<dd><a href="#id13"><span class="problematic" id="id14">:tf_main:`tf.ConfigProto &lt;ConfigProto&gt;`</span></a>, used as the <code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code>
-argument of <a href="#id15"><span class="problematic" id="id16">:tf_main:`tf session &lt;Session&gt;`</span></a>.</dd>
+<dd><a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/ConfigProto">tf.ConfigProto</a>, used as the <code class="xref py py-attr docutils literal notranslate"><span class="pre">config</span></code>
+argument of <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/Session">tf session</a>.</dd>
 </dl>
 </dd>
 </dl>
 <p>Example:</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">BasicSeq2seq</span><span class="p">(</span><span class="n">data_hparams</span><span class="p">,</span> <span class="n">model_hparams</span><span class="p">)</span>
-<span class="n">exor</span> <span class="o">=</span> <span class="n">Executor</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-    <span class="n">data_hparams</span><span class="o">=</span><span class="n">data_hparams</span><span class="p">,</span>
-    <span class="n">config</span><span class="o">=</span><span class="n">run_config</span><span class="p">)</span>
-<span class="n">exor</span><span class="o">.</span><span class="n">train_and_evaluate</span><span class="p">(</span>
-    <span class="n">max_train_steps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-    <span class="n">eval_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -125,8 +203,7 @@ argument of <a href="#id15"><span class="problematic" id="id16">:tf_main:`tf ses
 <dl class="method">
 <dt id="shabda.run.Executor.evaluate">
 <code class="descname">evaluate</code><span class="sig-paren">(</span><em>steps=None</em>, <em>checkpoint_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/run/executor.html#Executor.evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.run.Executor.evaluate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluates the model. See <a href="#id17"><span class="problematic" id="id18">:tf_main:`tf.estimator.Estimator.evaluate
-&lt;estimator/Estimator#evaluate&gt;`</span></a> for more details.</p>
+<dd><p>Evaluates the model. See <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#evaluate">tf.estimator.Estimator.evaluate</a> for more details.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
@@ -146,8 +223,7 @@ variables instead of restored from checkpoint.</dd>
 <dl class="method">
 <dt id="shabda.run.Executor.train">
 <code class="descname">train</code><span class="sig-paren">(</span><em>max_steps=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/run/executor.html#Executor.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.run.Executor.train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trains the model. See <a href="#id19"><span class="problematic" id="id20">:tf_main:`tf.estimator.Estimator.train
-&lt;estimator/Estimator#train&gt;`</span></a> for more details.</p>
+<dd><p>Trains the model. See <a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/Estimator#train">tf.estimator.Estimator.train</a> for more details.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
@@ -164,8 +240,7 @@ in the middle, training stops before <code class="xref py py-attr docutils liter
 <dt id="shabda.run.Executor.train_and_evaluate">
 <code class="descname">train_and_evaluate</code><span class="sig-paren">(</span><em>max_train_steps=None</em>, <em>eval_steps=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/shabda/run/executor.html#Executor.train_and_evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#shabda.run.Executor.train_and_evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trains and evaluates the model. See
-<a href="#id21"><span class="problematic" id="id22">:tf_main:`tf.estimator.train_and_evaluate
-&lt;estimator/train_and_evaluate&gt;`</span></a> for more details.</p>
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/estimator/train_and_evaluate">tf.estimator.train_and_evaluate</a> for more details.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd><dl class="first last docutils">
@@ -186,32 +261,62 @@ OutOfRange exception.</dd>
 </div>
 
 
+           </div>
+           
           </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data.html" class="btn btn-neutral float-right" title="DatasetFactory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../references/References.html" class="btn btn-neutral" title="Related Work" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Shabda Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="data.html" title="AudioDatasetBase"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../references/References.html" title="Related Work"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">shabda  documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Shabda Team.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

@@ -6,3 +6,5 @@ Executor
 
 .. autoclass:: shabda.run.Executor
     :members:
+    :undoc-members:
+    :show-inheritance:

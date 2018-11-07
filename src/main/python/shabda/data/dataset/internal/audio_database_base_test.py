@@ -27,7 +27,7 @@ from overrides import overrides
 from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
 
 
-class TestAudioDataset(AudioDatasetBase):
+class SampleAudioDataset(AudioDatasetBase):
     """
     A test dataset emulating the labels
     """
@@ -63,7 +63,7 @@ class TestDatabaseBase(unittest.TestCase):
     Test cases for AudioDatasetBase
     """
     def setUp(self):
-        self.dataset = TestAudioDataset(hparams=None)
+        self.dataset = SampleAudioDataset(hparams=None)
         self.dataset.init()
 
     def test_get_one_hot_encoded(self):

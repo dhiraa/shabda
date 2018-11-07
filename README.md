@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/asyml/texar.svg?branch=master)](https://travis-ci.org/dhiraa/shabda)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/asyml/texar/blob/master/LICENSE)
+ 
+ 
 ## Introduction
 
 In recent past, Deep Learning models have proven their potential in many application areas, however its entry into embedded world has its own twists and practical difficulties.
@@ -51,7 +55,19 @@ pip install -r requirements.txt
 -----------------------------------------------------------------------------------------------------------------------
 
 
+### Git Configure
+https://help.github.com/articles/setting-your-commit-email-address-in-git/
+
+```
+git clone https://github.com/digisight/fillmore
+
+#to push without entering password everytime
+git remote rm origin
+git remote add origin  https://USERNAME:PASSWORD@github.com/dhiraa/shabda.git
+
+#checkout remote branch
+git checkout -b branch_name origin/branch_name
 
 
-# Other notatble Audio Repos
+## Other notatble Audio Repos
 - https://github.com/mozilla/DeepSpeech

@@ -24,7 +24,7 @@ from shabda.models.internal.model_base import ModelBase
 
 class ClassifierBase(ModelBase):
     """
-    Base class for
+    Base class for classification models
     """
     def __init__(self, hparams):
         ModelBase.__init__(self, hparams=hparams)
@@ -45,6 +45,13 @@ class ClassifierBase(ModelBase):
         return hparams
 
     def _get_loss(self, labels, logits):
+        """
+        Loss functions for classification problems
+        Refer: https://en.wikipedia.org/wiki/Loss_functions_for_classification
+        :param labels:
+        :param logits:
+        :return:
+        """
         loss = tf.losses.softmax_cross_entropy(
             onehot_labels=labels,
             logits=logits,
