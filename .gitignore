@@ -1,7 +1,10 @@
+//.ipynb_checkpoints//*
 data/freesound-audio-tagging/input/audio_test/*
 data/freesound-audio-tagging/input/audio_train/*
 data/freesound-audio-tagging/input/*.csv
 notebooks/temp_data/*
+doctrees/
+.buildinfo
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -104,10 +107,6 @@ venv.bak/
 
 # mkdocs documentation
 /site
-_site
 
 # mypy
 .mypy_cache/
-
-# gem lock
-Gemfile.lock
