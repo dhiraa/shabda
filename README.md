@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/dhiraa/shabda.svg?branch=master)](https://travis-ci.com/dhiraa/shabda/)
-[![Documentation Status](https://readthedocs.org/projects/texar/badge/?version=latest)](https://shabda.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/shabda/badge/?version=latest)](https://shabda.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/asyml/texar/blob/master/LICENSE)
  
  
