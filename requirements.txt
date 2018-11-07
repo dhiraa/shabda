@@ -4,11 +4,9 @@ pandas
 numpy
 sklearn
 overrides
-#audio
 pyAudioAnalysis
 eyed3
 pydub
 madmom
-#documentation
 recommonmark
 sphinx_rtd_theme
