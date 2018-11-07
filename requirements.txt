@@ -1,0 +1,12 @@
+tqdm
+tensorflow-gpu
+pandas
+numpy
+sklearn
+overrides
+pyAudioAnalysis
+eyed3
+pydub
+madmom
+recommonmark
+sphinx_rtd_theme
