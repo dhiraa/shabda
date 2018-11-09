@@ -6,7 +6,20 @@ matrix:
       python:
         - "3.6"
       install:
-        - pip install -r requirements.txt
+      	- pip install cython
+      	- pip install -e .[tensorflow-cpu]
+      	- pip install flake8
+      	- pip install tqdm
+      	- pip install pandas
+      	- pip install numpy
+      	- pip install sklearn
+      	- pip install overrides
+      	- pip install pyAudioAnalysis
+      	- pip install eyed3
+      	- pip install pydub
+      	- pip install madmom
+      	- pip install recommonmark
+      	- pip install sphinx_rtd_theme
 
       before_script:
         # stop the build if there are Python syntax errors or undefined names
@@ -19,19 +32,19 @@ matrix:
         - pytest
 
     - language: java
-      install: true
+#      install: true
       jdk:
         - oraclejdk8
         - openjdk8
       script:
         - ./gradlew build --scan -s
-      before_cache:
-        - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      cache:
-        directories:
-          - $HOME/.gradle/caches/
-          - $HOME/.gradle/wrapper/
+#      before_cache:
+#        - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+#        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+#      cache:
+#        directories:
+#          - $HOME/.gradle/caches/
+#          - $HOME/.gradle/wrapper/
 
 notifications:
   email:
