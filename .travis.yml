@@ -6,7 +6,7 @@ matrix:
       python:
         - "3.6"
       install:
-        - pip install -e .[tensorflow-cpu]
+#        - pip install -e .[tensorflow-cpu]
         - pip install -r requirements.txt
 
       before_script:
@@ -31,6 +31,19 @@ matrix:
         directories:
           - $HOME/.gradle/caches/
           - $HOME/.gradle/wrapper/
+
+    - language: android
+      install: true
+      jdk: oraclejdk8
+      android:
+        components:
+          - tools
+          - android-28
+          - build-tools-28.0.0
+      before_script:
+          - cd android/Shabda
+      script:
+          - ./gradlew build connectedCheck
 
 notifications:
   email:

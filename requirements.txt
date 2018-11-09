@@ -1,7 +1,8 @@
+[tensorflow-cpu] --install-option="-e"
 pandas
 numpy
 sklearn
-Cython --install-option="--no-cython-compile"
+Cython3 --install-option="--no-cython-compile"
 flake8
 tqdm
 overrides
