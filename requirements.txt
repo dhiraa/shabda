@@ -1,3 +1,4 @@
+.[tensorflow-cpu] --install-option='-e'
 pandas
 numpy
 sklearn
@@ -5,7 +6,6 @@ cython
 flake8
 tqdm
 overrides
-tensorflow-cpu
 pyAudioAnalysis
 eyed3
 pydub
