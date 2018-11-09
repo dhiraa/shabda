@@ -60,7 +60,7 @@ matrix:
       before_script:
           - cd android/Shabda
       script:
-          - ./gradlew build connectedCheck
+          - ./gradlew build
 
       before_cache:
       - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
