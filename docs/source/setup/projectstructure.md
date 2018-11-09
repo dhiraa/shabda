@@ -1,10 +1,16 @@
-# Shabda Folder Structure
+# Shabda Project Structure
+
+Project has three components
+- Python based Model development framework using Tensorflow
+- Java/Kotlin framework to imitate Python pre-processing and postprocessing steps
+- Android application that uses the model using TFLite and the Jar from above step.  
+
 
 ```
 
 |
 |- android : Android Applications
-|- bin : 
+|- bin : Any runnable
 |- build : Gradle build output
 |- data : Open Datasets 
 |- docs : Documentation

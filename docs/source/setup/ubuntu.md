@@ -49,6 +49,9 @@ gradle -v
 conda create -n shabda python=3.6
 source activate shabda
 cd path/to/shabda/
+pip install -e .[tensorflow-cpu] 
+#or
+pip install -e .[tensorflow-gpu]
 pip install -r requirements.txt
 ```
 
