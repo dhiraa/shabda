@@ -1,9 +1,11 @@
-tqdm
-tensorflow-gpu
 pandas
 numpy
 sklearn
+cython
+flake8
+tqdm
 overrides
+tensorflow-cpu
 pyAudioAnalysis
 eyed3
 pydub

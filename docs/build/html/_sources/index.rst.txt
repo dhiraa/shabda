@@ -13,6 +13,16 @@ Welcome to shabda's documentation!
    references/AudioBasics.md
    references/References.md
 
+Setup
+=====
+
+.. toctree::
+   :maxdepth: 1
+
+   setup/ubuntu.md
+   setup/intellij.md
+   setup/projectstructure.md
+
 API
 ====
 

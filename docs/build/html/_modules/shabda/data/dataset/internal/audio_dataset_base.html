@@ -83,6 +83,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../references/References.html">Related Work</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/ubuntu.html">Ubuntu Environment Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/intellij.html">IDE Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/projectstructure.html">Shabda Folder Structure</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../code/run.html">Executor</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../code/data.html">DatasetFactory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../code/data.html#audiodatasetbase">AudioDatasetBase</a></li>
@@ -341,7 +346,10 @@
 <span class="sd">        :param label: string</span>
 <span class="sd">        :return: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="c1">#hack for pytest TODO</span>
         <span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_labels_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_label_2_index</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
         <span class="n">vector</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>

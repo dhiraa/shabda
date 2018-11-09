@@ -39,35 +39,12 @@ Come up with following modular components which can be then used as plug and pla
 
 -----------------------------------------------------------------------------------------------------------------------
 
-
-## Python Environment
-
-```
-conda create -n shabda python=3.6
-source activate shabda
-pip install -r requirements.txt
-```
-
------------------------------------------------------------------------------------------------------------------------
-
 ## [Examples](src/main/python/shabda/examples)
 
 
 -----------------------------------------------------------------------------------------------------------------------
 
 
-### Git Configure
-https://help.github.com/articles/setting-your-commit-email-address-in-git/
-
-```
-git clone https://github.com/digisight/fillmore
-
-#to push without entering password everytime
-git remote rm origin
-git remote add origin  https://USERNAME:PASSWORD@github.com/dhiraa/shabda.git
-
-#checkout remote branch
-git checkout -b branch_name origin/branch_name
 
 
 ## Other notatble Audio Repos
