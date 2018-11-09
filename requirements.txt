@@ -1,4 +1,4 @@
-Cython --install-option="--no-cython-compile"
+Cython3 --install-option="--no-cython-compile"
 .[tensorflow-cpu] --install-option='-e'
 pandas
 numpy
