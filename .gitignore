@@ -98,6 +98,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+models/
 
 # Spyder project settings
 .spyderproject
@@ -111,3 +112,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# IDE & Mac OS
+*.DS_Store
+*.idea/
+
+# Jekyll
+Gemfile.lock
+.jekyll-metadata

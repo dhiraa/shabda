@@ -31,6 +31,7 @@ class SampleAudioDataset(AudioDatasetBase):
     """
     A test dataset emulating the labels
     """
+
     def __init__(self, hparams):
         AudioDatasetBase.__init__(self, hparams=hparams)
 
@@ -48,7 +49,7 @@ class SampleAudioDataset(AudioDatasetBase):
 
     @staticmethod
     def default_hparams():
-        return {"labels_index_map_store_path" : "/tmp/shabda/"}
+        return {"labels_index_map_store_path": "/tmp/shabda/"}
 
     @overrides
     def get_predefined_labels(self):
@@ -58,10 +59,12 @@ class SampleAudioDataset(AudioDatasetBase):
     def get_labels(self):
         return ["aone", "btwo", "cthree"]
 
+
 class TestDatabaseBase(unittest.TestCase):
     """
     Test cases for AudioDatasetBase
     """
+
     def setUp(self):
         self.dataset = SampleAudioDataset(hparams=None)
         self.dataset.init()
@@ -101,6 +104,7 @@ class TestDatabaseBase(unittest.TestCase):
 
         vector = self.dataset.get_one_hot_encoded("cthree")
         assert (np.array_equal(vector, [0, 0, 0, 0, 0, 1]))
+
 
 if __name__ == '__main__':
     unittest.main()

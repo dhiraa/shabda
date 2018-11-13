@@ -30,7 +30,6 @@ import tensorflow as tf
 from overrides import overrides
 import matplotlib.pyplot as plt
 
-
 from madmom.audio.signal import SignalProcessor, FramedSignalProcessor
 from madmom.audio.spectrogram import SpectrogramProcessor, LogarithmicFilteredSpectrogramProcessor
 from madmom.audio.filters import LogFilterbank
@@ -40,13 +39,12 @@ from shabda.data.dataset.freesound_dataset import FreeSoundAudioDataset
 from shabda.data.iterators.internal.free_sound_data_iterator_base import FreeSoundDataIteratorBase
 
 
-
-
 class MadmomFeatureIteratorV2(FreeSoundDataIteratorBase):
     """
     Custom feature extraction using Madmom library pipepline
     Reference: https://github.com/CPJKU/dcase_task2/blob/master/dcase_task2/prepare_spectrograms.py
     """
+
     def __init__(self, hparams, dataset: FreeSoundAudioDataset):
         super(MadmomFeatureIteratorV2, self).__init__(hparams, dataset)
 
@@ -59,7 +57,6 @@ class MadmomFeatureIteratorV2(FreeSoundDataIteratorBase):
         filt_proc = LogarithmicFilteredSpectrogramProcessor(filterbank=LogFilterbank, num_bands=26, fmin=20, fmax=14000)
         processor_pipeline2 = [sig_proc, fsig_proc, spec_proc, filt_proc]
         self.processor_version2 = SequentialProcessor(processor_pipeline2)
-
 
     @overrides
     def _user_map_func(self, file_path, label):
@@ -82,6 +79,6 @@ class MadmomFeatureIteratorV2(FreeSoundDataIteratorBase):
         :param label:
         :return:
         """
-        data = tf.reshape(data, shape=[128,33])
+        data = tf.reshape(data, shape=[128, 33])
         label = tf.reshape(label, shape=[42])
         return data, label

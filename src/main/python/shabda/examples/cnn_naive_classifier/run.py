@@ -8,7 +8,9 @@ import importlib
 import sys
 import os
 import tensorflow as tf
+
 sys.path.append("src/main/python/")
+sys.path.append("../..")
 
 from shabda.run.experiments import Experiments
 

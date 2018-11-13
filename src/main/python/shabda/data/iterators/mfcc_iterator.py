@@ -27,7 +27,7 @@ from shabda.data.iterators.internal.free_sound_data_iterator_base import FreeSou
 from shabda.helpers import audio
 from shabda.helpers.print_helper import *
 
-        
+
 class MFCCDataIterator(FreeSoundDataIteratorBase):
     def __init__(self, hparams, dataset: FreeSoundAudioDataset):
         super(MFCCDataIterator, self).__init__(hparams, dataset)
@@ -46,7 +46,6 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
         return librosa.feature.mfcc(data, sr=sampling_rate, n_mfcc=n_mfcc, n_fft=1024,
                                     hop_length=345)  # with sr=44KHz and hop_length=345 to get n_mfcc x 256
 
-
     def load_wav_audio_file(self, file_path):
         """
 
@@ -55,7 +54,6 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
         """
         data, sample_rate = librosa.core.load(file_path, sr=None, res_type="kaiser_fast")
         return data, sample_rate
-
 
     @overrides
     def _user_map_func(self, file_path, label):
@@ -71,10 +69,10 @@ class MFCCDataIterator(FreeSoundDataIteratorBase):
                                     max_audio_length=self._max_audio_length)
 
         data = self.get_frequency_spectrum(data=data, n_mfcc=self._n_mfcc,
-                                            sampling_rate=self._sampling_rate)
+                                           sampling_rate=self._sampling_rate)
 
-        data = np.expand_dims(data, axis=-1) #to make it compatible with CNN network
-        data = data.flatten(order="C") #row major
+        data = np.expand_dims(data, axis=-1)  # to make it compatible with CNN network
+        data = data.flatten(order="C")  # row major
 
         label = self._dataset.get_one_hot_encoded(label)
         return data, label

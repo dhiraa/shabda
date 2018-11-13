@@ -8,14 +8,15 @@ import importlib
 import sys
 import os
 import tensorflow as tf
+
 sys.path.append("src/main/python/")
+sys.path.append("../..")
 
 from shabda.run.experiments import Experiments
 
-flags = tf.flags
-flags.DEFINE_string("config", "config", "The config to use.")
-flags.DEFINE_string("mode", "train", "train/retrain/predict")
-FLAGS = flags.FLAGS
+tf.flags.DEFINE_string("config", "config", "The config to use.")
+tf.flags.DEFINE_string("mode", "train", "train/retrain/predict")
+FLAGS = tf.flags.FLAGS
 config = importlib.import_module(FLAGS.config)
 
 if __name__ == "__main__":

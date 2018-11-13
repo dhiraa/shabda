@@ -22,10 +22,12 @@ import tensorflow as tf
 from overrides import overrides
 from shabda.models.internal.model_base import ModelBase
 
+
 class ClassifierBase(ModelBase):
     """
     Base class for classification models
     """
+
     def __init__(self, hparams):
         ModelBase.__init__(self, hparams=hparams)
 
@@ -35,12 +37,13 @@ class ClassifierBase(ModelBase):
 
     @staticmethod
     def default_hparams():
-        """Returns a dictionary of hyperparameters with default values.
+        """
+        Returns a dictionary of hyperparameters with default values.
         """
         hparams = {
             "name": "classifier_base",
-            "out_dim" : -1,
-            "learning_rate" : 0.001
+            "out_dim": -1,
+            "learning_rate": 0.001
         }
         return hparams
 
@@ -48,6 +51,7 @@ class ClassifierBase(ModelBase):
         """
         Loss functions for classification problems
         Refer: https://en.wikipedia.org/wiki/Loss_functions_for_classification
+
         :param labels:
         :param logits:
         :return:
@@ -81,7 +85,7 @@ class ClassifierBase(ModelBase):
         predicted_class = tf.argmax(logits, axis=1, name="class_output")
         tf.logging.info('predicted_class: -----> {}'.format(predicted_class))
         return predicted_class
-    
+
     def _get_class_probabilities(self, logits):
         predicted_probabilities = tf.nn.softmax(logits, name="softmax_output")
         tf.logging.info('predicted_probabilities: -----> {}'.format(predicted_probabilities))
@@ -98,7 +102,7 @@ class ClassifierBase(ModelBase):
     def _get_eval_metrics(self, labels, logits):
         label_argmax = tf.argmax(labels, 1, name='label_argmax')
         predicted_class = self._get_predicted_classes(logits=logits)
-        
+
         eval_metric_ops = {
             'Accuracy': tf.metrics.accuracy(
                 labels=label_argmax,
@@ -117,7 +121,6 @@ class ClassifierBase(ModelBase):
 
     @overrides
     def _build(self, features, labels, params, mode, config=None):
-
         # Loss, training and eval operations are not needed during inference.
         loss = None
         optimizer = None
@@ -138,7 +141,6 @@ class ClassifierBase(ModelBase):
             loss = self._get_loss(labels=labels, logits=logits)
             optimizer = self._get_optimizer(loss)
             eval_metric_ops = self._get_eval_metrics(logits=logits, labels=labels)
-
 
         return tf.estimator.EstimatorSpec(
             mode=mode,

@@ -30,10 +30,11 @@ import tensorflow as tf
 from overrides import overrides
 import matplotlib.pyplot as plt
 
-from madmom.processors import  Processor
+from madmom.processors import Processor
 
 from shabda.data.dataset.freesound_dataset import FreeSoundAudioDataset
 from shabda.data.iterators.internal.free_sound_data_iterator_base import FreeSoundDataIteratorBase
+
 
 class LibrosaProcessor(Processor):
 
@@ -74,7 +75,7 @@ class LibrosaProcessor(Processor):
                 stft = np.log10(stft + 1)
             else:
                 freqs = librosa.core.fft_frequencies(sr=sr, n_fft=n_fft)
-                stft = librosa.perceptual_weighting(stft**2, freqs, ref=1.0, amin=1e-10, top_db=99.0)
+                stft = librosa.perceptual_weighting(stft ** 2, freqs, ref=1.0, amin=1e-10, top_db=99.0)
 
             # apply mel filterbank
             spectrogram = librosa.feature.melspectrogram(S=stft, sr=sr, n_mels=n_mels, fmax=fmax)
@@ -86,12 +87,14 @@ class LibrosaProcessor(Processor):
 
         return spectrograms
 
+
 class MadmomFeatureIteratorV1(FreeSoundDataIteratorBase):
     """
     Custom melspectrogram feature extraction using Madmom library pipepline
     using librosa APIs
     Reference: https://github.com/CPJKU/dcase_task2/blob/master/dcase_task2/prepare_spectrograms.py
     """
+
     def __init__(self, hparams, dataset: FreeSoundAudioDataset):
         super(MadmomFeatureIteratorV1, self).__init__(hparams, dataset)
 
@@ -121,6 +124,6 @@ class MadmomFeatureIteratorV1(FreeSoundDataIteratorBase):
         :param label:
         :return:
         """
-        data = tf.reshape(data, shape=[128,33])
+        data = tf.reshape(data, shape=[128, 33])
         label = tf.reshape(label, shape=[42])
         return data, label

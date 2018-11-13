@@ -19,7 +19,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
-
 import json
 import os
 import numpy as np
@@ -38,6 +37,7 @@ class AudioDatasetBase(object):
     - Provide list of training, validation and test files files
     - Expose list of lables and predefined labels, which then can be used for label indexing
     """
+
     def __init__(self, hparams, unknown_label="_unknown_"):
         self._hparams = HParams(hparams, self.default_hparams())
         self.is_init = False
@@ -64,7 +64,7 @@ class AudioDatasetBase(object):
         :return: dict: params
         """
         params = {
-            "labels_index_map_store_path" : "/tmp/shabda/"
+            "labels_index_map_store_path": "/tmp/shabda/"
         }
         return params
 
@@ -156,12 +156,11 @@ class AudioDatasetBase(object):
         self._labels = self.get_predefined_labels() + list(self._labels)
         self._labels = sorted(self._labels)
 
-        self._labels_2_index = {label.lower():i for i, label in enumerate([self._unknown_label] + self._labels)}
+        self._labels_2_index = {label.lower(): i for i, label in enumerate([self._unknown_label] + self._labels)}
         self._index_2_labels = {i: label for label, i in self._labels_2_index.items()}
 
         self._labels_dim = len(self._labels_2_index)
         return None
-
 
     def get_label_2_index(self, label):
         """
@@ -169,7 +168,7 @@ class AudioDatasetBase(object):
         :param label: string
         :return: index: int
         """
-        return self._labels_2_index.get(label, 0) #return unknown index when not found
+        return self._labels_2_index.get(label, 0)  # return unknown index when not found
 
     def get_index_2_label(self, index):
         """
@@ -177,7 +176,7 @@ class AudioDatasetBase(object):
         :param index: int
         :return: label: string
         """
-        return self._index_2_labels.get(index,  self._unknown_label)
+        return self._index_2_labels.get(index, self._unknown_label)
 
     def get_one_hot_encoded(self, label):
         """
@@ -188,7 +187,7 @@ class AudioDatasetBase(object):
         try:
             label = str(label, 'utf-8').lower()
         except:
-            label = str(label).lower() #hack for pytest TODO
+            label = str(label).lower()  # hack for pytest TODO
         vector = np.zeros(self._labels_dim, dtype=int)
         index = self.get_label_2_index(label=label)
         vector[index] = 1
@@ -202,7 +201,7 @@ class AudioDatasetBase(object):
         :return: None
         """
         directory = os.path.join(self._hparams["labels_index_map_store_path"],
-                        self.get_dataset_name())
+                                 self.get_dataset_name())
 
         if not os.path.isdir(directory):
             os.makedirs(directory)

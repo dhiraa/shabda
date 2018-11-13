@@ -21,6 +21,7 @@ from __future__ import division
 
 import sys
 from importlib import import_module
+
 sys.path.append("../")
 
 
@@ -34,13 +35,13 @@ class DatasetFactory():
     dataset_path = {
         # file_name : package
         "freesound_dataset": "shabda.data.dataset.freesound_dataset",
-        "speech_commands_v0_02" : "shabda.data.dataset.speech_commands_v0_02"
+        "speech_commands_v0_02": "shabda.data.dataset.speech_commands_v0_02"
     }
 
     datasets = {
         # file_name : class_name
         "freesound_dataset": "FreeSoundAudioDataset",
-        "speech_commands_v0_02" : "SpeechCommandsV002"
+        "speech_commands_v0_02": "SpeechCommandsV002"
     }
 
     @staticmethod
@@ -65,5 +66,3 @@ class DatasetFactory():
         """
         dataset = DatasetFactory._get_dataset(dataset_file_name)
         return dataset
-
-

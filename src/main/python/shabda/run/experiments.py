@@ -30,6 +30,7 @@ from shabda.data.dataset.internal.dataset_factory import DatasetFactory
 from shabda.data.iterators.internal.data_iterator_factory import DataIteratorFactory
 from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
 from shabda.models.internal.model_factory import ModelsFactory
+# TODO - "import *" also import some python meta variables, hence not recommended
 from shabda.helpers.print_helper import *
 from shabda.hyperparams.hyperparams import HParams
 from shabda.run.executor import Executor
@@ -38,8 +39,9 @@ from shabda.run.executor import Executor
 log = logging.getLogger('tensorflow')
 log.setLevel(logging.DEBUG)
 
-CGREEN2  = '\33[92m'
-CEND      = '\33[0m'
+CGREEN2 = '\33[92m'
+CEND = '\33[0m'
+
 
 class Experiments(object):
     """
@@ -48,6 +50,7 @@ class Experiments(object):
     This allows the user to choose the modules dynamically and run the experiments without ever writing the
     code when we need mix and experiment dataset and modules.
     """
+
     def __init__(self, hparams, mode='train'):
         self._hparams = HParams(hparams, self.default_hparams())
 
@@ -64,35 +67,38 @@ class Experiments(object):
     def get_dataset_reference(self, dataset_name):
         """
         Uses the dataset name to get the reference from the dataset factory class
+
         :param dataset_name:
         :return:
         """
 
         print_debug("Geting dataset :" + dataset_name)
-        dataset =  DatasetFactory.get(dataset_file_name=dataset_name)
-        return  dataset
+        dataset = DatasetFactory.get(dataset_file_name=dataset_name)
+        return dataset
 
     def get_iterator_reference(self, iterator_name):
         """
         Uses the iterator name to get the reference from the iterator factory class
+
         :param iterator_name:
         :return:
         """
 
         print_debug("Geting iterator  :" + iterator_name)
-        iterator =  DataIteratorFactory.get(iterator_name=iterator_name)
-        return  iterator
+        iterator = DataIteratorFactory.get(iterator_name=iterator_name)
+        return iterator
 
     def get_model_reference(self, model_name):
         """
         Uses the model name to get the reference from the model factory class
+
         :param model_name:
         :return:
         """
 
         print_debug("Geting model :" + model_name)
-        model =  ModelsFactory.get(model_name=model_name)
-        return  model
+        model = ModelsFactory.get(model_name=model_name)
+        return model
 
     def setup(self):
 
@@ -110,14 +116,15 @@ class Experiments(object):
 
         # Using factory classes get the handle for the actual classes from string
         self.dataset = self.get_dataset_reference(self._hparams.dataset_name)
-        self._data_iterator  = self.get_iterator_reference(self._hparams.data_iterator_name)
+        self._data_iterator = self.get_iterator_reference(self._hparams.data_iterator_name)
         self.model = self.get_model_reference(self._hparams.model_name)
 
         # Initialize the handles and call any user specific init() methods
         self.dataset: AudioDatasetBase = self.dataset(hparams=self._hparams[self._hparams['dataset_name']])
         self.dataset.init()
 
-        self._data_iterator: DataIteratorBase  = self._data_iterator(hparams=self._hparams.data_iterator, dataset = self.dataset)
+        self._data_iterator: DataIteratorBase = self._data_iterator(hparams=self._hparams.data_iterator,
+                                                                    dataset=self.dataset)
 
         model_params = self._hparams.model
 
@@ -146,9 +153,8 @@ class Experiments(object):
 
         exec = Executor(model=self.model, data_iterator=self._data_iterator, config=self._run_config)
 
-        if (mode == "train" or mode == "retrain"):
+        if (mode == "train") or (mode == "retrain"):
             for current_epoch in tqdm(range(num_epochs), desc="Epoch"):
                 current_max_steps = (num_samples // batch_size) * (current_epoch + 1)
-                exec.train(max_steps=current_max_steps)#, eval_steps=None)
+                exec.train(max_steps=current_max_steps)  # , eval_steps=None)
                 exec.evaluate(steps=200)
-

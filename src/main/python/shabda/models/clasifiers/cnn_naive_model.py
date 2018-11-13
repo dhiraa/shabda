@@ -19,7 +19,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
 import tensorflow as tf
 from tensorflow.contrib.learn import ModeKeys
 from overrides import overrides
@@ -39,8 +38,8 @@ class CustomDNN(ClassifierBase):
         """
         hparams = {
             "name": "cnn_naive",
-            "out_dim" : -1,
-            "learning_rate" : 0.001
+            "out_dim": -1,
+            "learning_rate": 0.001
         }
         return hparams
 
@@ -55,7 +54,7 @@ class CustomDNN(ClassifierBase):
         # features_reshaped = features
         tf.logging.debug('features_reshaped -----> {}'.format(features_reshaped))  # shape=(?, 64, 256, 1)
 
-        with  tf.name_scope('conv_layer'):
+        with tf.name_scope('conv_layer'):
             # Convolutional Layer #1
             conv1 = tf.layers.conv2d(
                 inputs=features_reshaped,
@@ -106,28 +105,6 @@ class CustomDNN(ClassifierBase):
             tf.logging.info('logits: ------> {}'.format(logits))
 
             return logits
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     #
     # def _model_fn(self, features, labels, mode):

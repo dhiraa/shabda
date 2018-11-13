@@ -19,9 +19,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
 import sys
 from importlib import import_module
+
 sys.path.append("../")
 
 
@@ -32,17 +32,16 @@ class ModelsFactory():
     with the change of the filename
     """
     model_path = {
-        "cnn_beginners_model" : "shabda.models.cnn_beginners_model",
+        "cnn_beginners_model": "shabda.models.cnn_beginners_model",
         "cnn_naive_model": "shabda.models.clasifiers.cnn_naive_model",
-        "naive_lstm" : "shabda.models.clasifiers.naive_lstm"
+        "naive_lstm": "shabda.models.clasifiers.naive_lstm"
     }
 
     models = {
-        "cnn_beginners_model" :  "CustomDNN",
-        "cnn_naive_model" : "CustomDNN",
-        "naive_lstm" : "NaiveLSTM"
+        "cnn_beginners_model": "CustomDNN",
+        "cnn_naive_model": "CustomDNN",
+        "naive_lstm": "NaiveLSTM"
     }
-
 
     def __init__(self):
         pass
@@ -61,7 +60,6 @@ class ModelsFactory():
         # Return the model class
         return model
 
-
     @staticmethod
     def get(model_name):
         """
@@ -71,5 +69,3 @@ class ModelsFactory():
         """
         model = ModelsFactory._get_model(model_name)
         return model
-
-

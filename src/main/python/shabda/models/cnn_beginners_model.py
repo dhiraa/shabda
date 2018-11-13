@@ -10,13 +10,13 @@ from tensorflow.contrib.learn import ModeKeys
 
 from shabda.helpers.print_helper import *
 
+
 class CustomDNN(tf.estimator.Estimator):
     def __init__(self, model_dir, hparams, run_config):
         super(CustomDNN, self).__init__(
             model_fn=self._model_fn,
             model_dir=model_dir,
             config=run_config)
-
 
     def _model_fn(self, features, labels, mode):
         """Model function used in the estimator.
@@ -41,14 +41,12 @@ class CustomDNN(tf.estimator.Estimator):
         audio_features = tf.identity(float_audio_features, name="audio_features")
         features_reshaped = tf.reshape(audio_features, shape=(-1, 88200, 1), name="features_reshaped")
 
-
         if mode != ModeKeys.INFER:
             labels = features["labels"]
             labels = tf.identity(labels, name="features")
 
-        tf.logging.debug('features -----> {}'.format(audio_features)) #shape=(?, 64, 256, 1)
+        tf.logging.debug('features -----> {}'.format(audio_features))  # shape=(?, 64, 256, 1)
         tf.logging.debug('labels -----> {}'.format(labels))
-
 
         with  tf.name_scope('conv_layer'):
 
@@ -75,7 +73,7 @@ class CustomDNN(tf.estimator.Estimator):
             tf.logging.info('conv2: ------> {}'.format(conv2))  # (?, 64, 256, 32)
 
             # Pooling Layer #1
-            pool1 = tf.layers.max_pooling1d(inputs=conv2,pool_size=16,strides=1 )  # (?, 16, 64, 32)
+            pool1 = tf.layers.max_pooling1d(inputs=conv2, pool_size=16, strides=1)  # (?, 16, 64, 32)
             tf.logging.info('pool1: ------> {}'.format(pool1))
 
             # Dropout1
@@ -104,7 +102,7 @@ class CustomDNN(tf.estimator.Estimator):
             tf.logging.info('conv4: ------> {}'.format(conv4))  # (?, 16, 64, 64)
 
             # Pooling Layer #2
-            pool2 = tf.layers.max_pooling1d(inputs=conv4, pool_size=4,strides=1)  # (?, 16, 64, 32)
+            pool2 = tf.layers.max_pooling1d(inputs=conv4, pool_size=4, strides=1)  # (?, 16, 64, 32)
             tf.logging.info('pool2: ------> {}'.format(pool2))  # (?, 4, 16, 64)
             # Dropout2
             if mode != ModeKeys.INFER:
@@ -133,7 +131,7 @@ class CustomDNN(tf.estimator.Estimator):
             tf.logging.info('conv6: ------> {}'.format(conv6))  # (?, 16, 64, 64)
 
             # Pooling Layer #2
-            pool3 = tf.layers.max_pooling1d(inputs=conv6, pool_size=4,strides=1)  # (?, 16, 64, 32)
+            pool3 = tf.layers.max_pooling1d(inputs=conv6, pool_size=4, strides=1)  # (?, 16, 64, 32)
             tf.logging.info('pool3: ------> {}'.format(pool3))  # (?, 4, 16, 64)
 
             # Dropout2
@@ -180,7 +178,6 @@ class CustomDNN(tf.estimator.Estimator):
 
             dense = tf.layers.dense(inputs=dense, units=1028, activation=tf.nn.relu)
             tf.logging.info('dense_@: ------> {}'.format(dense))  # (?, 16, 64, 64)
-
 
         with  tf.name_scope("logits-layer"):
             # [?, self.NUM_CLASSES]
@@ -257,27 +254,3 @@ class CustomDNN(tf.estimator.Estimator):
             train_op=train_op,
             eval_metric_ops=eval_metric_ops
         )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

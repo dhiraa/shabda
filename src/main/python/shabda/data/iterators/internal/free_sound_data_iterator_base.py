@@ -20,20 +20,22 @@ from __future__ import division
 from __future__ import print_function
 
 import tensorflow as tf
-from  overrides import overrides
+from overrides import overrides
 
 from shabda.data.iterators.internal.data_iterator_base import DataIteratorBase
 from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
 from shabda.helpers.print_helper import *
 
+
 class FreeSoundDataIteratorBase(DataIteratorBase):
     """
     FreeSound Data set iterators which makes use of `tf.data` APIs
     """
+
     def __init__(self, hparams, dataset: AudioDatasetBase):
         DataIteratorBase.__init__(self, hparams, dataset)
 
-        if not isinstance(dataset,  AudioDatasetBase):
+        if not isinstance(dataset, AudioDatasetBase):
             raise AssertionError("dataser should be an inherited class of AudioDatasetBase")
 
         self.name = "FreeSoundDataIteratorBase"
@@ -55,11 +57,11 @@ class FreeSoundDataIteratorBase(DataIteratorBase):
     @staticmethod
     def get_default_params():
         config = {"use_mfcc": False,
-        "n_mfcc": 64,
-        "batch_size": 64,
-        "num_epochs" : 1,
-        "sampling_rate": 44100,
-        "audio_duration": 2}
+                  "n_mfcc": 64,
+                  "batch_size": 64,
+                  "num_epochs": 1,
+                  "sampling_rate": 44100,
+                  "audio_duration": 2}
 
         return config
 
@@ -80,11 +82,10 @@ class FreeSoundDataIteratorBase(DataIteratorBase):
         # dataset.prefetch()
         # dataset = dataset.repeat(self._num_epochs)
         dataset = dataset.map(self._user_resize_func, num_parallel_calls=4)
-        dataset = dataset.prefetch(self._batch_size*2)
+        dataset = dataset.prefetch(self._batch_size * 2)
         dataset = dataset.batch(self._batch_size)
         print_info("Dataset output sizes are: ")
         print_info(dataset.output_shapes)
-
 
         return dataset
 
@@ -99,14 +100,13 @@ class FreeSoundDataIteratorBase(DataIteratorBase):
         # dataset = dataset.repeat(self._num_epochs)
         dataset = dataset.map(self._user_resize_func, num_parallel_calls=4)
 
-        dataset = dataset.prefetch(self._batch_size*2)
+        dataset = dataset.prefetch(self._batch_size * 2)
         dataset = dataset.batch(self._batch_size)
 
         print_info("Dataset output sizes are: ")
         print_info(dataset.output_shapes)
 
         return dataset
-
 
     @overrides
     def _get_test_input_function(self):

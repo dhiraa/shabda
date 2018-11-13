@@ -21,6 +21,7 @@ from __future__ import division
 
 import numpy as np
 
+
 # import re
 # import os
 # from glob import glob
@@ -47,6 +48,7 @@ def pad_data_array(data, max_audio_length):
             offset = 0
         data = np.pad(data, (offset, max_audio_length - len(data) - offset), "constant")
     return data
+
 
 def audio_norm(data):
     """

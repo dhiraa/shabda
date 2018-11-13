@@ -19,11 +19,13 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from overrides import overrides
 
 from shabda.data.dataset.internal.audio_dataset_base import AudioDatasetBase
+# TODO: Remove 'import *'
 from shabda.helpers.print_helper import *
 
 
@@ -37,6 +39,7 @@ class FreeSoundAudioDataset(AudioDatasetBase):
 
     Data can be downloaded to the `data` dir using the Kaggle API. Refer `data` dir for more info.
     """
+
     def __init__(self, hparams=None):
         # TODO: test "super(AudioDatasetBase, self).__init__(self, hparams=hparams)"
         AudioDatasetBase.__init__(self, hparams=hparams)
@@ -53,8 +56,6 @@ class FreeSoundAudioDataset(AudioDatasetBase):
         self.val_df = None
         self.test_df = None
 
-        self.init()
-
     @overrides
     def init(self):
         self._load_data_info()
@@ -65,12 +66,12 @@ class FreeSoundAudioDataset(AudioDatasetBase):
         freesound_dataset = {
             "labels_index_map_store_path": "/tmp/shabda/",
             "n_classes": 41,
-            "train_csv_path" : "data/freesound-audio-tagging/input/train.csv",
-            "val_csv_path" : None,  # we dont have any validation csv file as such
-            "test_csv_path" : "./data/freesound-audio-tagging/input/sample_submission.csv",
-            "train_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_train/",
-            "val_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_train/",
-            "test_audio_files_dir" : "./data/freesound-audio-tagging/input/audio_test/"
+            "train_csv_path": "data/freesound-audio-tagging/input/train.csv",
+            "val_csv_path": None,  # we dont have any validation csv file as such
+            "test_csv_path": "./data/freesound-audio-tagging/input/sample_submission.csv",
+            "train_audio_files_dir": "./data/freesound-audio-tagging/input/audio_train/",
+            "val_audio_files_dir": "./data/freesound-audio-tagging/input/audio_train/",
+            "test_audio_files_dir": "./data/freesound-audio-tagging/input/audio_test/"
         }
         return freesound_dataset
 
@@ -81,11 +82,11 @@ class FreeSoundAudioDataset(AudioDatasetBase):
     def _load_data_info(self):
         # fname label manually_verified
         print_info("Train data info DF : " + self.train_csv_path)
-        print_info("Test data info DF : " +  self.test_csv_path)
+        print_info("Test data info DF : " + self.test_csv_path)
 
         # We use train_test_split API to split predicted_class set into tran and val set
         self.train_df = pd.read_csv(self.train_csv_path)
-        if self.val_csv_path == None:
+        if self.val_csv_path is None:
             self.train_df, self.val_df = train_test_split(self.train_df, test_size=0.2)
         else:
             self.val_df = pd.read_csv(self.val_csv_path)
@@ -104,6 +105,7 @@ class FreeSoundAudioDataset(AudioDatasetBase):
     def get_predefined_labels(self):
         """
         No predefined labels
+
         :return: list: empty
         """
         return []
@@ -112,28 +114,30 @@ class FreeSoundAudioDataset(AudioDatasetBase):
     def get_train_files(self):
         """
         Returns the list of train file paths from Freesound dataset
-        :return:
+
+        :return: list of train files
         """
-        files = []
-        for fname in  self.train_df['fname']:
-            files.append(self._hparams.train_audio_files_dir + "/" + fname)
+
+        pdir = self._train_audio_files_dir
+        files = [os.path.join(pdir, _) for _ in self.train_df['fname']]
         return files
 
     @overrides
     def get_val_files(self):
         """
         Returns the list of validation file paths from Freesound dataset
-        :return:
+
+        :return: list of validation files
         """
-        files = []
-        for fname in self.val_df['fname']:
-            files.append(self._hparams.val_audio_files_dir + "/" + fname)
+        pdir = self._val_audio_files_dir
+        files = [os.path.join(pdir, _) for _ in self.val_df['fname']]
         return files
 
     @overrides
     def get_train_labels(self):
         """
         Returns the list of train labels from Freesound dataset
+
         :return: list of one-hot encoded labels
         """
         return self.train_df["label"]
@@ -142,6 +146,7 @@ class FreeSoundAudioDataset(AudioDatasetBase):
     def get_val_labels(self):
         """
         Returns the list of validation labels from Freesound dataset
+
         :return: list of one-hot encoded labels
         """
         return self.val_df["label"]

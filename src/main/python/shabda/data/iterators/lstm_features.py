@@ -26,6 +26,7 @@ from overrides import overrides
 from shabda.data.dataset.freesound_dataset import FreeSoundAudioDataset
 from shabda.data.iterators.internal.free_sound_data_iterator_base import FreeSoundDataIteratorBase
 
+
 class LSTMFeatureIterator(FreeSoundDataIteratorBase):
     def __init__(self, hparams, dataset: FreeSoundAudioDataset):
         super(LSTMFeatureIterator, self).__init__(hparams, dataset)
@@ -55,7 +56,7 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
             return np.hstack([data, np.zeros(shape=(rows, new_cols))])
 
     # References: https://github.com/ruohoruotsi/LSTM-Music-Genre-Classification
-    def extract_audio_features(self, audio_file, hop_length,  timeseries_length = 128):
+    def extract_audio_features(self, audio_file, hop_length, timeseries_length=128):
         """
         Combine 4 audio features as one time series feature, namely : MFCC, Spectral Centroid,
         Chroma STFT, Spectral Contrast
@@ -92,7 +93,7 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
         data[:, :, 14:26] = chroma.T[0:timeseries_length, :]
         data[:, :, 26:33] = spectral_contrast.T[0:timeseries_length, :]
 
-        #print("Extracted features audio track %s." % audio_file)
+        # print("Extracted features audio track %s." % audio_file)
 
         return data  # , np.expand_dims(np.asarray(target), axis=1)
 
@@ -117,10 +118,6 @@ class LSTMFeatureIterator(FreeSoundDataIteratorBase):
         :param label:
         :return:
         """
-        data = tf.reshape(data, shape=[128,33])
+        data = tf.reshape(data, shape=[128, 33])
         label = tf.reshape(label, shape=[42])
         return data, label
-
-
-
-

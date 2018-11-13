@@ -23,15 +23,16 @@ import unittest
 import numpy as np
 from shabda.helpers.audio import pad_data_array, audio_norm
 
+
 class TestAudioUtility(unittest.TestCase):
     """
 
     """
+
     def test_pad_data_array(self):
         array = np.ones(12)
         array_filled = pad_data_array(array, 20)
         assert array_filled.shape[0] == 20
-
 
     def test_audio_norm(self):
         arr = np.array([1, 2, 1, 2, 1])

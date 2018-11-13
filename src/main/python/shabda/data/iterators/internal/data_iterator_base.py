@@ -20,10 +20,12 @@ from __future__ import print_function
 
 from shabda.hyperparams.hyperparams import HParams
 
+
 class DataIteratorBase():
     """
 
     """
+
     def __init__(self, hparams, dataset):
         self._hparams = HParams(hparams, default_hparams=self.get_default_params())
         self._dataset = dataset
